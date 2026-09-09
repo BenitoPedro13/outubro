@@ -46,15 +46,23 @@ real device targets later).
 
 ### Stack (see `docs/architecture.md` §6 for the full table and rationale)
 
+Pinned to what's actually installed as of `TASK-preview-page.md` (2026-09-09) — re-verify
+against each tool's own current docs before bumping a major, and re-pin here when you do.
+Payload/Postgres/Blob are still **not installed** (`TASK-scaffold.md`, not yet aligned/executed
+beyond its `create-next-app` portion — see that task doc for why the interactive
+`create-payload-app` CLI wizard couldn't be driven from this environment and what to do
+instead).
+
 | Layer | Choice | Note |
 |---|---|---|
-| App | Next.js (App Router), latest stable, TypeScript | static-first, one app |
-| CMS | Payload, embedded in the same Next.js app | **scoped narrowly**: media/blob storage + 4 light collections (pricing, testimonials, FAQ, team) — not a full page-builder CMS. This is "mostly a landing page," the editable surface is genuinely small. |
-| Database | PostgreSQL | Payload's Postgres adapter |
-| Media | **Vercel Blob** (`@payloadcms/storage-vercel-blob`) | per the client's explicit instruction — this is the concrete reason Payload is in the stack at all right now |
-| Styling | Tailwind (latest) + shadcn/ui primitives | shadcn chosen because Magic UI's components assume it |
-| Animation | GSAP + Lenis + SplitType-class techniques (**Tier 2**, `awwwards-v8` skill) + selected **React Bits** / **Magic UI** components | Tier 3 (WebGL) deliberately rejected — see `docs/architecture.md` §4. Use React Bits (reactbits.dev) and Magic UI (magicui.design) *where they fit*, not wholesale — verify exact component names/props against their live docs before use, never invent one (see §5 below). |
-| Forms | Two hand-built typed forms (contact/lead, careers) | persisted + emailed, never email-only |
+| App | **Next.js 16.3.4** (App Router) · **React 19.2.8** · TypeScript 5.9.3 | static-first, one app, scaffolded via `create-next-app` |
+| Package manager | **pnpm** | Payload's own current install docs state pnpm is preferred over npm/yarn for this stack |
+| CMS | Payload — **not yet installed** | **scoped narrowly** once it lands: media/blob storage + 4 light collections (pricing, testimonials, FAQ, team) — not a full page-builder CMS. This is "mostly a landing page," the editable surface is genuinely small. |
+| Database | PostgreSQL — **not yet installed** | Payload's Postgres adapter |
+| Media | **Vercel Blob** (`@payloadcms/storage-vercel-blob`) — **not yet installed** | per the client's explicit instruction — this is the concrete reason Payload is in the stack at all right now |
+| Styling | **Tailwind 4.3.3** + shadcn/ui primitives (shadcn not yet initialized) | shadcn chosen because Magic UI's components assume it |
+| Animation | **GSAP 3.15.0** + **Lenis 1.3.26** (**Tier 2**, `awwwards-v8` skill) + selected **React Bits** / **Magic UI** components (neither installed yet) | Tier 3 (WebGL) deliberately rejected — see `docs/architecture.md` §4. Use React Bits (reactbits.dev) and Magic UI (magicui.design) *where they fit*, not wholesale — verify exact component names/props against their live docs before use, never invent one (see §5 below). |
+| Forms | Two hand-built typed forms (contact/lead, careers) — not yet built | persisted + emailed, never email-only |
 | Email | `[VERIFY: no transactional provider chosen yet]` | |
 | Analytics | `[VERIFY: not chosen yet]` | recommend cookieless (Plausible/self-hosted Umami) to avoid a cookie-banner requirement, but this project's own call |
 | Hosting | Vercel | matches the Blob integration |
