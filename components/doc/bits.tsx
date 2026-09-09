@@ -2,6 +2,8 @@
 // proven on the UniMeet project's own pitch page (components/pitch/bits.tsx there),
 // restyled in Outubro's own system instead of a neutral/editorial one.
 
+import { StaggerReveal } from "@/components/motion/stagger-reveal";
+
 export function Label({ children, tone = "ink" }: { children: React.ReactNode; tone?: "ink" | "cobalt" | "pink" }) {
   const color = tone === "cobalt" ? "var(--color-cobalt)" : tone === "pink" ? "var(--color-pink)" : "var(--color-ink)";
   return <span className="doc-label" style={{ color }}>{children}</span>;
@@ -44,7 +46,9 @@ export function Rule() {
   return <hr className="doc-rule" />;
 }
 
+// speakPolish-style settle-in (docs/research.md §4b) via StaggerReveal — off on
+// mobile/reduced-motion there, so this needs no branching of its own.
 export function Grid({ children, cols = 2 }: { children: React.ReactNode; cols?: 2 | 3 | 4 }) {
   const map = { 2: "sm:grid-cols-2", 3: "sm:grid-cols-2 lg:grid-cols-3", 4: "sm:grid-cols-2 lg:grid-cols-4" };
-  return <div className={`grid gap-5 ${map[cols]}`}>{children}</div>;
+  return <StaggerReveal className={`grid gap-5 ${map[cols]}`}>{children}</StaggerReveal>;
 }

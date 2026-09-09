@@ -1,5 +1,6 @@
 import { meta } from "@/content/outubro-pitch";
 import { StarBurst } from "@/components/preview/doodles";
+import { RotatingBadge } from "./rotating-badge";
 import { DocContainer, Label } from "./bits";
 
 // Full-bleed, immediately legible on load — no animation gate. The signature
@@ -12,6 +13,9 @@ export function DocHero() {
       <StarBurst className="absolute -right-10 top-8 opacity-90 sm:-right-8" color="var(--color-pink)" points={5} size={64} />
       <StarBurst className="absolute -bottom-8 left-1/4 opacity-80" color="var(--color-coral)" points={5} size={44} />
       <StarBurst className="absolute right-1/4 bottom-4 opacity-70" color="var(--color-cobalt)" points={9} size={30} />
+      <div className="absolute right-2 top-20 scale-75 sm:right-6 sm:top-28 sm:scale-100">
+        <RotatingBadge text="OUTUBRO IDIOMAS ✦ SITE NOVO ✦ " color="var(--color-cobalt)" />
+      </div>
 
       <DocContainer wide>
         <div className="relative rounded-3xl border-2 border-[var(--color-ink)] bg-[var(--color-bg-alt)] p-8 sm:p-12">

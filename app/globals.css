@@ -153,6 +153,23 @@ body {
   margin-left: calc(50% - 50vw);
 }
 
+/* speakPolish-inspired ambient motion (docs/research.md §4b) — a continuously
+   rotating arc-text badge. Cheap (CSS transform only); off only under reduced
+   motion — mobile gets the same motion as desktop, per the user's own call. */
+@keyframes spin-badge {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-badge {
+  animation: spin-badge 14s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin-badge {
+    animation: none;
+  }
+}
+
 /* Editorial "doc" system — the presentation's own chrome: labels, cards, quotes, rules.
    Named separately from the future site's component classes (docs/architecture.md's
    components/site/) since this page is a dated planning document, not site UI. */

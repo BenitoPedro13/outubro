@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { sections } from "@/content/outubro-pitch";
 import { DocHero } from "@/components/doc/hero";
 import { Section } from "@/components/doc/section";
-import { DocCard, Grid, Label, Quote, DocContainer } from "@/components/doc/bits";
+import { DocFooter } from "@/components/doc/footer";
+import { DocCard, Grid, Label, Quote } from "@/components/doc/bits";
 import { SignatureInteraction } from "@/components/motion/signature-interaction";
+import { StaggerReveal } from "@/components/motion/stagger-reveal";
+import { RotatingBadge } from "@/components/doc/rotating-badge";
 
 export const metadata: Metadata = {
   title: "Outubro Idiomas — pesquisa, decisões e plano",
@@ -115,6 +118,9 @@ export default function ApresentacaoPage() {
 
       {/* 06 — identidade + interação de assinatura */}
       <Section n={s.identidade.n} title={s.identidade.title} lead={s.identidade.lead} wide grid>
+        <div className="mb-6 flex justify-end">
+          <RotatingBadge text="BORA DESTRAVAR ✦ TIER 2 ✦ " color="var(--color-pink)" />
+        </div>
         <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
           {s.identidade.palette.map((c) => (
             <div key={c.hex} className="overflow-hidden rounded-xl border-2 border-[var(--color-ink)]">
@@ -150,7 +156,7 @@ export default function ApresentacaoPage() {
 
       {/* 07 — próximos passos */}
       <Section n={s.proximosPassos.n} title={s.proximosPassos.title} lead={s.proximosPassos.lead} wide>
-        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerReveal as="ol" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {s.proximosPassos.items.map((p) => (
             <li key={p.no} className="doc-card">
               <Label>Passo {p.no}</Label>
@@ -158,12 +164,12 @@ export default function ApresentacaoPage() {
               <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-soft)]">{p.body}</p>
             </li>
           ))}
-        </ol>
+        </StaggerReveal>
       </Section>
 
       {/* 08 — perguntas abertas */}
       <Section n={s.perguntasAbertas.n} title={s.perguntasAbertas.title} lead={s.perguntasAbertas.lead} wide>
-        <div className="space-y-4">
+        <StaggerReveal className="grid gap-4">
           {s.perguntasAbertas.items.map((q, i) => (
             <div key={q.q} className="doc-card">
               <Label tone="cobalt">Pergunta {String(i + 1).padStart(2, "0")}</Label>
@@ -171,18 +177,10 @@ export default function ApresentacaoPage() {
               <p className="mt-2 max-w-[68ch] text-sm leading-relaxed text-[var(--color-ink-soft)]">{q.why}</p>
             </div>
           ))}
-        </div>
+        </StaggerReveal>
       </Section>
 
-      <footer className="border-t-2 border-[var(--color-ink)] py-14">
-        <DocContainer wide>
-          <p className="type-subheading">Qual seção você quer ajustar primeiro?</p>
-          <p className="type-body mt-2 max-w-[60ch] text-[var(--color-ink-soft)]">
-            Este documento vive em <code>docs/</code> e nesta página ao mesmo tempo — qualquer
-            correção aqui volta para os arquivos antes da próxima etapa.
-          </p>
-        </DocContainer>
-      </footer>
+      <DocFooter />
     </main>
   );
 }
