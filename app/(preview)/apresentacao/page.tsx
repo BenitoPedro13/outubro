@@ -1,105 +1,188 @@
 import type { Metadata } from "next";
-import { UntangleHero } from "@/components/motion/untangle-hero";
-import { StarBurst, StickyNote, ChatBubble } from "@/components/preview/doodles";
+import { sections } from "@/content/outubro-pitch";
+import { DocHero } from "@/components/doc/hero";
+import { Section } from "@/components/doc/section";
+import { DocCard, Grid, Label, Quote, DocContainer } from "@/components/doc/bits";
+import { SignatureInteraction } from "@/components/motion/signature-interaction";
 
-// Preview document, not real site content — excluded from indexing.
-// docs/tasks/TASK-preview-page.md §2.
 export const metadata: Metadata = {
-  title: "Outubro Idiomas — prévia de identidade e motion",
+  title: "Outubro Idiomas — pesquisa, decisões e plano",
   robots: { index: false, follow: false },
 };
 
-const PALETTE: { name: string; token: string; hex: string; ink?: boolean }[] = [
-  { name: "Lima", token: "--color-lime", hex: "#C8E639", ink: true },
-  { name: "Lima escuro", token: "--color-lime-deep", hex: "#9BB821", ink: true },
-  { name: "Cobalto", token: "--color-cobalt", hex: "#2E5FE0" },
-  { name: "Cobalto escuro", token: "--color-cobalt-deep", hex: "#1F44AD" },
-  { name: "Pink", token: "--color-pink", hex: "#F0389C" },
-  { name: "Coral", token: "--color-coral", hex: "#FF5D3E" },
-  { name: "Tinta", token: "--color-ink", hex: "#14120F" },
-];
-
-const STEPS = [
-  { n: "01", title: "Teste de nível", body: "Descobre seu ponto de partida em poucos minutos.", color: "var(--color-lime)" },
-  { n: "02", title: "Plano personalizado", body: "Sem decoreba genérica — o plano segue seu objetivo.", color: "var(--color-pink)" },
-  { n: "03", title: "Fala desde o dia 1", body: "Acompanhamento real, professor brasileiro, conversação de verdade.", color: "var(--color-cobalt)" },
-] as const;
+const s = sections;
 
 export default function ApresentacaoPage() {
   return (
-    <main className="mx-auto max-w-4xl px-6 pb-24">
-      <div className="sticky top-0 z-10 -mx-6 mb-12 border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 px-6 py-3 text-center backdrop-blur">
-        <p className="type-caps text-[var(--color-ink-soft)]">
-          Prévia de direção — identidade visual &amp; motion, ainda não é o site final
-        </p>
-      </div>
+    <main>
+      <DocHero />
 
-      {/* 1. Hero — signature interaction */}
-      <section className="notebook-grid mb-20 rounded-2xl px-6 py-16">
-        <UntangleHero />
-        <p className="type-lead mx-auto mt-6 max-w-md text-center">
-          Role a página para ver o cordão se desenrolar — a mesma interação que abre o
-          site de verdade.
-        </p>
-      </section>
+      {/* 01 — contexto */}
+      <Section n={s.contexto.n} title={s.contexto.title} lead={s.contexto.lead}>
+        <Grid cols={2}>
+          {s.contexto.points.map((p) => (
+            <DocCard key={p.title} title={p.title}>
+              {p.body}
+            </DocCard>
+          ))}
+        </Grid>
+      </Section>
 
-      {/* 2. Palette */}
-      <section className="mb-20">
-        <h2 className="type-heading mb-6">Paleta</h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {PALETTE.map((c) => (
-            <div key={c.token} className="overflow-hidden rounded-xl border border-[var(--color-border)]">
-              <div className="h-20" style={{ background: c.hex }} />
-              <div className="p-3">
-                <p className="text-sm font-semibold">{c.name}</p>
-                <p className="type-caps text-[var(--color-ink-soft)]">{c.hex}</p>
+      {/* 02 — problema */}
+      <Section n={s.problema.n} title={s.problema.title} lead={s.problema.lead} bg="var(--color-pink)">
+        <ul className="flex flex-wrap gap-2">
+          {s.problema.evidence.map((e) => (
+            <li key={e} className="doc-label rounded-full border-2 border-[var(--color-ink)] bg-[var(--color-bg-alt)] px-3 py-2 text-[var(--color-ink)]">
+              {e}
+            </li>
+          ))}
+        </ul>
+        <p className="type-body mt-8 max-w-[68ch]">{s.problema.body}</p>
+      </Section>
+
+      {/* 03 — referências */}
+      <Section n={s.referencias.n} title={s.referencias.title} lead={s.referencias.lead} wide>
+        <Grid cols={3}>
+          {s.referencias.items.map((r) => (
+            <div key={r.name} className="doc-card flex h-full flex-col">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="type-subheading">{r.name}</h3>
+              </div>
+              <Label>{r.scale}</Label>
+              <div className="mt-5 space-y-4 text-sm leading-relaxed">
+                <p>
+                  <span className="doc-label block text-[var(--color-cobalt)]">Aproveitar</span>
+                  <span className="mt-1.5 block text-[var(--color-ink-soft)]">{r.take}</span>
+                </p>
+                <p>
+                  <span className="doc-label block text-[var(--color-coral)]">Evitar</span>
+                  <span className="mt-1.5 block text-[var(--color-ink-soft)]">{r.avoid}</span>
+                </p>
+              </div>
+            </div>
+          ))}
+        </Grid>
+        <p className="type-body mt-8 max-w-[68ch]">{s.referencias.common}</p>
+      </Section>
+
+      {/* 04 — decisão */}
+      <Section n={s.decisao.n} title={s.decisao.title} lead={s.decisao.lead} bg="var(--color-lime)">
+        <Grid cols={2}>
+          {s.decisao.pillars.map((p) => (
+            <DocCard key={p.title} title={p.title}>
+              {p.body}
+            </DocCard>
+          ))}
+        </Grid>
+      </Section>
+
+      {/* 05 — estrutura */}
+      <Section n={s.estrutura.n} title={s.estrutura.title} lead={s.estrutura.lead} wide>
+        <div className="space-y-4">
+          {s.estrutura.pages.map((p) => (
+            <article key={p.no} className="doc-card sm:p-8">
+              <div className="grid gap-6 sm:grid-cols-[1fr_1.4fr]">
+                <div>
+                  <div className="flex items-baseline gap-3">
+                    <Label tone="cobalt">{p.no}</Label>
+                    <h3 className="type-subheading">{p.name}</h3>
+                  </div>
+                  <p className="doc-label mt-4 block text-[var(--color-ink-soft)]">Para quem</p>
+                  <p className="mt-1.5 text-sm">{p.audience}</p>
+                  <p className="doc-label mt-4 block text-[var(--color-ink-soft)]">Objetivo</p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-[var(--color-ink-soft)]">{p.purpose}</p>
+                </div>
+                <div>
+                  <p className="doc-label text-[var(--color-ink-soft)]">O que entra</p>
+                  <ul className="mt-3 space-y-2">
+                    {p.contents.map((c) => (
+                      <li key={c} className="flex gap-3 text-sm leading-relaxed text-[var(--color-ink-soft)]">
+                        <span aria-hidden="true" className="mt-2 h-px w-3 shrink-0 bg-[var(--color-ink)]" />
+                        <span>{c}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="doc-card mt-6 border-dashed">
+          <Label tone="pink">{s.estrutura.open.title}</Label>
+          <p className="type-body mt-3 max-w-[68ch] text-[var(--color-ink-soft)]">{s.estrutura.open.body}</p>
+        </div>
+      </Section>
+
+      {/* 06 — identidade + interação de assinatura */}
+      <Section n={s.identidade.n} title={s.identidade.title} lead={s.identidade.lead} wide grid>
+        <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
+          {s.identidade.palette.map((c) => (
+            <div key={c.hex} className="overflow-hidden rounded-xl border-2 border-[var(--color-ink)]">
+              <div className="h-16" style={{ background: c.hex }} />
+              <div className="bg-[var(--color-bg-alt)] p-2">
+                <p className="text-xs font-bold">{c.name}</p>
+                <p className="doc-label text-[var(--color-ink-soft)]">{c.hex}</p>
               </div>
             </div>
           ))}
         </div>
-      </section>
 
-      {/* 3. Type specimen */}
-      <section className="mb-20">
-        <h2 className="type-heading mb-6">Tipografia — Manrope</h2>
-        <div className="flex flex-col gap-6">
-          <p className="type-display">Bora aprender de verdade</p>
-          <p className="type-heading">Página, professor, já — sem corte no descendente</p>
-          <p className="type-subheading">Aulas individuais ou em dupla</p>
-          <p className="type-lead">
-            Fala desde o dia 1, com professores brasileiros e método comunicativo.
-          </p>
-          <p className="type-body">
-            +500 alunos destravados desde 2018, com formação contínua para os professores.
-          </p>
+        <SignatureInteraction />
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <div className="doc-card bg-[var(--color-bg-alt)]">
+            <Label tone="cobalt">{s.identidade.interaction.label}</Label>
+            <Quote>{s.identidade.interaction.statement}</Quote>
+          </div>
+          <div className="doc-card bg-[var(--color-bg-alt)]">
+            <Label tone="pink">Alternativas descartadas</Label>
+            <ul className="mt-4 space-y-2">
+              {s.identidade.interaction.rejected.map((r) => (
+                <li key={r} className="flex gap-3 text-sm leading-relaxed text-[var(--color-ink-soft)]">
+                  <span aria-hidden="true" className="mt-2 h-px w-3 shrink-0 bg-[var(--color-ink)]" />
+                  <span>{r}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </section>
+      </Section>
 
-      {/* 4. Doodle layer */}
-      <section className="mb-20">
-        <h2 className="type-heading mb-6">Camada de rabiscos</h2>
-        <div className="relative flex flex-wrap items-center gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-alt)] p-8">
-          <StarBurst color="var(--color-lime)" />
-          <ChatBubble tone="cobalt">Fala desde o dia 1</ChatBubble>
-          <ChatBubble tone="pink">Sem decoreba</ChatBubble>
-          <ChatBubble tone="ink">Seu professor é brasileiro</ChatBubble>
-          <StarBurst color="var(--color-coral)" points={5} size={24} />
-        </div>
-      </section>
+      {/* 07 — próximos passos */}
+      <Section n={s.proximosPassos.n} title={s.proximosPassos.title} lead={s.proximosPassos.lead} wide>
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {s.proximosPassos.items.map((p) => (
+            <li key={p.no} className="doc-card">
+              <Label>Passo {p.no}</Label>
+              <h3 className="type-subheading mt-3">{p.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-soft)]">{p.body}</p>
+            </li>
+          ))}
+        </ol>
+      </Section>
 
-      {/* 5. How it works — sticky-note cards */}
-      <section className="mb-8">
-        <h2 className="type-heading mb-6">Como funciona</h2>
-        <div className="flex flex-col items-start gap-8 sm:flex-row sm:justify-between">
-          {STEPS.map((step, i) => (
-            <StickyNote key={step.n} color={step.color} rotate={i % 2 === 0 ? -2 : 2}>
-              <p className="type-caps mb-2 opacity-70">{step.n}</p>
-              <p className="mb-1 font-bold">{step.title}</p>
-              <p className="text-sm">{step.body}</p>
-            </StickyNote>
+      {/* 08 — perguntas abertas */}
+      <Section n={s.perguntasAbertas.n} title={s.perguntasAbertas.title} lead={s.perguntasAbertas.lead} wide>
+        <div className="space-y-4">
+          {s.perguntasAbertas.items.map((q, i) => (
+            <div key={q.q} className="doc-card">
+              <Label tone="cobalt">Pergunta {String(i + 1).padStart(2, "0")}</Label>
+              <h3 className="type-subheading mt-3">{q.q}</h3>
+              <p className="mt-2 max-w-[68ch] text-sm leading-relaxed text-[var(--color-ink-soft)]">{q.why}</p>
+            </div>
           ))}
         </div>
-      </section>
+      </Section>
+
+      <footer className="border-t-2 border-[var(--color-ink)] py-14">
+        <DocContainer wide>
+          <p className="type-subheading">Qual seção você quer ajustar primeiro?</p>
+          <p className="type-body mt-2 max-w-[60ch] text-[var(--color-ink-soft)]">
+            Este documento vive em <code>docs/</code> e nesta página ao mesmo tempo — qualquer
+            correção aqui volta para os arquivos antes da próxima etapa.
+          </p>
+        </DocContainer>
+      </footer>
     </main>
   );
 }

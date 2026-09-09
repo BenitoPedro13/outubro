@@ -103,3 +103,42 @@ Payload, Postgres, Vercel Blob, the real page structure from `architecture.md` �
 copy/content, forms, and anything from `TASK-scaffold.md` beyond the bare `create-next-app`
 base. This page is disposable-or-archived once it's served its purpose — not the seed of the
 real home page.
+
+## 7. Revision — rebuilt as an editorial document, not a style-tile
+
+The first version (§1-6 above) was wrong about *what kind* of preview was needed, not just
+under-executed. The user's own words after watching a screen recording of it
+(`docs/refs/debug-videos/debug-presentation.mov`): it showed no research, no explanation of
+what was found bad, no explanation of what was decided or why; the signature interaction was
+invisible at rest and easy to scroll past unnoticed; the notebook grid was boxed into one
+padded card instead of full-bleed like the actual Babbly reference. The user then pointed at
+`/Users/benito/Documents/personal/unimeet`'s own `/pitch` page as the actual model: a numbered,
+argued planning document (understanding → landscape → recommendation → sitemap-with-
+audience/purpose/contents-per-page → visual specimens → open questions), not an ambient mockup.
+
+**What changed:**
+- Added `content/outubro-pitch.ts` — the actual research/decision narrative (contexto,
+  problema, referências with take/avoid per source, decisão with reasoning, estrutura as a
+  full sitemap with audience/purpose/contents per page, identidade, próximos passos, perguntas
+  abertas), mirroring the structural pattern of the UniMeet project's `content/pitch.ts`.
+- Added `components/doc/*` (bits, section, hero) — the editorial chrome (numbered sections,
+  cards, quotes, labels) that pattern requires, styled in Outubro's system instead of a neutral
+  one.
+- Replaced `components/motion/untangle-hero.tsx` with
+  `components/motion/signature-interaction.tsx`: plays once via `ScrollTrigger`'s `onEnter`
+  when its own block scrolls into view (not scrubbed against absolute page-scroll position,
+  which was too easy to miss), starts ~22% drawn so it's never a blank frame, has a visible
+  caption and a manual "Assistir de novo" replay button. Verified the replay itself
+  mid-transition (`stroke-dashoffset` sampled every 200ms across the animation), not just its
+  end state.
+- `.notebook-grid` is now applied via a `.full-bleed` section, not a padded/rounded inner card —
+  matches the reference's own edge-to-edge treatment.
+- Fixed a real lint error introduced in the rewrite (`react-hooks/set-state-in-effect` —
+  `prefers-reduced-motion` branching moved to a CSS `motion-reduce:` variant instead of
+  `useState`, per this repo's own rendering conventions).
+
+**Verification (second pass):** rebuilt page checked section-by-section at 1440px (screenshots
+of every section) and 375px (hero + a multi-column section), replay button exercised twice —
+once visually, once by sampling the animating style property directly to confirm it actually
+resets and re-plays rather than just looking static in a before/after screenshot. `pnpm build`
+and `pnpm lint` clean after the fix above.
