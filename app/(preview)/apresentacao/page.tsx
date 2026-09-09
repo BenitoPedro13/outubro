@@ -9,7 +9,7 @@ import { StaggerReveal } from "@/components/motion/stagger-reveal";
 import { RotatingBadge } from "@/components/doc/rotating-badge";
 
 export const metadata: Metadata = {
-  title: "Outubro Idiomas — pesquisa, decisões e plano",
+  title: "Outubro Idiomas | pesquisa, decisões e plano",
   robots: { index: false, follow: false },
 };
 

@@ -26,7 +26,7 @@ export function DocHero() {
           <dl className="mt-10 grid gap-x-10 gap-y-4 sm:grid-cols-2">
             <div className="border-t-2 border-[var(--color-ink)] pt-3">
               <dt className="doc-label text-[var(--color-ink-soft)]">Sobre este documento</dt>
-              <dd className="mt-1.5 text-sm">Prévia de direção — não é o site final, é a etapa antes dele.</dd>
+              <dd className="mt-1.5 text-sm">Prévia de direção não é o site final, é a etapa antes dele.</dd>
             </div>
             <div className="border-t-2 border-[var(--color-ink)] pt-3">
               <dt className="doc-label text-[var(--color-ink-soft)]">Data</dt>

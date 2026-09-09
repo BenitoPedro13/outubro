@@ -39,7 +39,7 @@ export function DocFooter() {
           <div>
             <p className="type-subheading">Bora destravar sua língua e seu futuro?</p>
             <p className="type-body mt-3 max-w-[36ch] text-[var(--color-ink-soft)]">
-              Este documento vive em <code>docs/</code> e nesta página ao mesmo tempo —
+              Este documento vive em <code>docs/</code> e nesta página ao mesmo tempo,
               qualquer correção aqui volta para os arquivos antes da próxima etapa.
             </p>
           </div>
