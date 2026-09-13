@@ -53,6 +53,14 @@ site's scroll-progress indicator and as a section-divider motif (a short straigh
 between sections, echoing the hero's resolved state). One signature moment becomes a running
 system instead of a single trick spent on page load.
 
+**As built on Home (2026-09-13, `TASK-home-static.md` §2.3):** the hero half plays **once on
+load**, not scroll-scrubbed — a scrubbed hero never resolves for a visitor who doesn't scroll, and
+the headline is the first thing read. It's pure CSS (`pathLength="1"` + `stroke-dashoffset`,
+~22% drawn at rest), and the "língua" payoff is a lime marker highlight scaling in behind the word
+rather than a font-weight change (weight animation reflows the LCP line → CLS). The scroll-synced
+half is the page-long cord under the sticky header (CSS `animation-timeline: scroll()`,
+progressive enhancement) plus resolved-cord dividers (`components/site/cord.tsx`).
+
 **Signature statement** (skill's required format): *"When the visitor scrolls into the hero,
 the brand's core promise of destravar (unsticking) manifests as a tangled cord illustration that
 untangles in sync with scroll progress, resolving exactly as the headline reaches focus — using
@@ -86,9 +94,9 @@ third-party font requests) is straightforward, but confirm the variable-font fil
 committing]`.
 
 **Scale**: the skill's golden-ratio `clamp()` scale (`aesthetic-foundations.md`), applied as-is
-— `--font-hero` through `--font-micro`. Descender clearance: start at `0.14em` for Manrope
-(rounder terminals than the skill's serif examples; measure with the canvas technique in
-`references/descender-safety.md` before finalizing) and apply the full Descender Safety Protocol
+— `--font-hero` through `--font-micro`. Descender clearance: **`0.31em`** — measured 2026-09-13 with the
+canvas technique in `references/descender-safety.md` (Manrope "gyjpq" at 100px descends 25.5px
+at both 400 and 800 weight; +20% buffer), replacing the original `0.14em` estimate — and apply the full Descender Safety Protocol
 to every display-text element (>48px) — `overflow: visible`, never `clip`.
 
 ## 4. Color
@@ -123,9 +131,29 @@ Proposed tokens (author these as CSS custom properties in the global stylesheet,
 }
 ```
 
-`[VERIFY: exact hex values against the client's actual logo files (`logo azul 1.png`,
-`logo verde 1.png`) with a color picker before finalizing — the values above are read from
-screen renders of those PNGs, not sampled precisely]`.
+**Resolved 2026-09-13** (`TASK-home-static.md` §2.0): pixel-sampled from the logo PNGs, which
+are flat single-colour fills — `logo verde 1.png` = **`#CFEA27`**, `logo azul 1.png` =
+**`#3B6DD8`** (identical to the live site's own `--lime`/`--blue`). `--color-lime` and
+`--color-cobalt` now use those exact values; pink, coral, ink and neutrals stay as approved
+(the live site's pink is a light `#FF97D2`, but the client approved the hot pink as presented).
+
+WCAG contrast, measured (use only passing pairs for text):
+
+| Text on ground | Ratio | Use |
+|---|---|---|
+| ink on bg | 17.75 | any |
+| ink-soft on bg / bg-alt | 8.79 / 9.11 | any |
+| ink on lime | 13.76 | any |
+| ink-soft on lime | 6.82 | any |
+| ink on pink | 5.12 | any |
+| ink on coral | 6.13 | any |
+| bg-alt on cobalt | 4.73 | any (just) |
+| cobalt on bg | 4.57 | any (just) |
+| bg-alt on pink | 3.59 | ≥24px / ≥18.66px bold only |
+| bg-alt on coral | 3.00 | ≥24px / ≥18.66px bold only |
+| pink on bg | 3.47 | large text / decoration only |
+| coral on bg | 2.89 | decoration only, never text |
+| ink-soft on pink | ~2.8 | never |
 
 ## 5. The doodle/sticker layer (Babbly pattern, adapted)
 
@@ -175,7 +203,7 @@ TIER: 2 (GSAP + Lenis + SplitType-class) — Tier 3 WebGL explicitly rejected, a
 
 ## 9. Open items before build starts
 
-- Exact hex sampling from source logo files (§4).
+- ~~Exact hex sampling from source logo files (§4).~~ Done 2026-09-13.
 - Final micro-copy wording (§5) — content selection, deferred.
 - Manrope variable-font self-hosting confirmation (§3).
-- Descender clearance measured against the actual Manrope files, not estimated (§3).
+- ~~Descender clearance measured against the actual Manrope files, not estimated (§3).~~ Done 2026-09-13 (0.31em).

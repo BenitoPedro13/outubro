@@ -16,7 +16,7 @@ a developer (pricing, testimonials, FAQ, teachers). Motion is **Awwwards `awwwar
 Tier 2** (GSAP + Lenis + SplitType-class techniques, React Bits / Magic UI components where they
 fit) — see §4 for why Tier 3 (WebGL) is explicitly rejected for this project.
 
-## 1. Page structure (proposal — needs sign-off, research.md §6 Q1)
+## 1. Page structure (approved by the client 2026-09-13 — research.md §5)
 
 One landing page carries the sales narrative end to end (this is the conversion path — every
 section earns its place by moving a visitor toward WhatsApp/matrícula). Supporting pages exist
@@ -140,6 +140,20 @@ not wholesale:
 - Both libraries render as React components; nothing here requires abandoning the
   Server-Components-by-default convention — each becomes a small `'use client'` leaf per the
   usual rule (global CLAUDE.md, "Rendering & effects conventions").
+
+**As built on Home (2026-09-13, `TASK-home-static.md`):** Home ships **no GSAP**. Every
+scroll-linked effect it needs (hero cord, header progress cord, card reveals) is expressible as
+CSS animations / scroll- and view-timelines, and Lenis runs its own rAF loop — so GSAP +
+ScrollTrigger (~46 KB gzip) stay out of the bundle until a page actually needs ScrollTrigger
+(pinning, timeline choreography). GSAP remains the Tier 2 tool for that; it's not removed from the
+stack.
+
+**JS budget, measured:** the "<120kb" Tier 2 target comes from the skill's Astro-flavoured
+guidance and is not reachable on Next.js 16 + React 19 — the framework runtime alone is
+~134 KB gzip (react-dom ~70, router ~46, rest ~18). Home's own client code is ~12 KB gzip (Lenis,
+the mobile CTA bar, one Lucide icon). The enforceable budget on this stack is therefore
+**site-owned client JS ≤ 25 KB gzip per page on top of the framework baseline**, with mobile
+Lighthouse Performance ≥ 90 as the outcome check.
 
 **One Tier-3-adjacent exception, deliberately cheap**: the signature interaction
 (visual-identity-spec.md §4) uses `stroke-dashoffset` on an inline SVG path driven by scroll

@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 /*
   Design tokens — docs/visual-identity-spec.md §3-4, §7.
@@ -13,9 +15,9 @@
   --color-ink: #14120f;
   --color-ink-soft: #4a4740;
   --color-border: #e7e3d8;
-  --color-lime: #c8e639;
+  --color-lime: #cfea27; /* sampled from logo verde 1.png, 2026-09-13 */
   --color-lime-deep: #9bb821;
-  --color-cobalt: #2e5fe0;
+  --color-cobalt: #3b6dd8; /* sampled from logo azul 1.png, 2026-09-13 */
   --color-cobalt-deep: #1f44ad;
   --color-pink: #f0389c;
   --color-coral: #ff5d3e;
@@ -38,7 +40,9 @@
   --ls-caps: 0.06em;
 
   /* Descender Safety Protocol — awwwards-v8 skill, mandatory on display text >48px */
-  --descender-clearance: 0.14em;
+  /* Measured 2026-09-13 (canvas technique, descender-safety.md): Manrope "gyjpq" at
+     100px descends 25.5px below baseline at both 400 and 800 → +20% buffer = 0.31em. */
+  --descender-clearance: 0.31em;
 
   /* Spacing (8px base) */
   --space-xs: 4px;
@@ -62,6 +66,29 @@
   --timing-macro: 1000ms;
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* shadcn/ui semantic tokens — mapped onto the brand tokens above so vendored
+     components/ui/* pick up the palette without being edited. Light only: the brand
+     commits to a single warm-light look (research.md §4b), so no .dark block. */
+  --background: var(--color-bg);
+  --foreground: var(--color-ink);
+  --card: var(--color-bg-alt);
+  --card-foreground: var(--color-ink);
+  --popover: var(--color-bg-alt);
+  --popover-foreground: var(--color-ink);
+  --primary: var(--color-ink);
+  --primary-foreground: var(--color-bg-alt);
+  --secondary: var(--color-lime);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-border);
+  --muted-foreground: var(--color-ink-soft);
+  --accent: var(--color-lime);
+  --accent-foreground: var(--color-ink);
+  --destructive: var(--color-coral);
+  --border: var(--color-border);
+  --input: var(--color-border);
+  --ring: var(--color-cobalt);
+  --radius: 1rem;
 }
 
 @theme inline {
@@ -72,14 +99,59 @@
   --color-pink: var(--color-pink);
   --color-coral: var(--color-coral);
   --font-sans: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+    }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -216,5 +288,248 @@ body {
   * {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Site system — the real pages (docs/tasks/TASK-home-static.md). Mobile-first:
+   base rules are the 375px layout, min-width queries add complexity upward.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.site-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1200px;
+  padding-inline: 20px;
+}
+@media (min-width: 768px) {
+  .site-container {
+    padding-inline: 40px;
+  }
+}
+
+/* Anchor targets clear the sticky header. */
+[id] {
+  scroll-margin-top: 88px;
+}
+
+/* Sticker shadow — hard offset, ink-tinted, the "cut-out and stuck on" look. */
+.sticker {
+  border: 2px solid var(--color-ink);
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+}
+
+/* Primary CTA — the one control every section funnels into. Transitions name their
+   properties (anti-patterns.md: never `transition: all`). */
+.btn-cta {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid var(--color-ink);
+  border-radius: 999px;
+  background: var(--color-lime);
+  padding: 12px 24px;
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  text-align: center;
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+  transition:
+    transform var(--timing-fast) var(--ease-out),
+    box-shadow var(--timing-fast) var(--ease-out),
+    background-color var(--timing-fast) var(--ease-out);
+}
+.btn-cta:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+}
+.btn-cta:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--color-ink);
+}
+.btn-cta--ink {
+  background: var(--color-ink);
+  color: var(--color-lime);
+  box-shadow: 4px 4px 0 0 var(--color-bg-alt);
+}
+.btn-cta--ink:hover {
+  box-shadow: 6px 6px 0 0 var(--color-bg-alt);
+}
+.btn-cta--on-dark {
+  box-shadow: 4px 4px 0 0 var(--color-lime-deep);
+}
+.btn-cta--on-dark:hover {
+  box-shadow: 6px 6px 0 0 var(--color-lime-deep);
+}
+.btn-cta--sm {
+  min-height: 44px;
+  padding: 8px 16px;
+  font-size: 0.9375rem;
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+
+/* Visible focus on every ground colour used: an ink ring with a light halo reads on
+   lime, pink, cobalt, coral and ink alike. */
+:where(a, button, summary):focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--color-bg-alt);
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -100px;
+  z-index: 100;
+  border-radius: 999px;
+  background: var(--color-ink);
+  padding: 10px 18px;
+  color: var(--color-lime);
+  font-weight: 800;
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+/* Signature interaction — hero (visual-identity-spec.md §2, TASK-home-static §2.3).
+   Pure CSS, zero JS: the path uses pathLength="1", so the dash math is unitless. It
+   rests at ~22% drawn (a visible knot, never a blank frame) and resolves on load; the
+   marker highlight behind "língua" lands as the cord straightens. Both animate only
+   transform / stroke-dashoffset: no layout, no CLS, h1 text readable from frame 1. */
+.cord-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.word-highlight {
+  position: relative;
+  white-space: nowrap;
+}
+.word-highlight::before {
+  content: "";
+  position: absolute;
+  inset: 12% -0.12em 8% -0.12em;
+  z-index: -1;
+  border-radius: 0.3em 0.5em 0.35em 0.6em;
+  background: var(--color-lime);
+  transform: rotate(-1.5deg);
+  transform-origin: left center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cord-path {
+    animation: cord-untangle 1.4s var(--ease-out) 0.25s both;
+  }
+  .word-highlight::before {
+    animation: word-mark 0.6s var(--ease-out) 1.05s both;
+  }
+}
+@keyframes cord-untangle {
+  from {
+    stroke-dashoffset: 0.78;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes word-mark {
+  from {
+    transform: rotate(-1.5deg) scaleX(0);
+  }
+  to {
+    transform: rotate(-1.5deg) scaleX(1);
+  }
+}
+
+/* The motif's recurring half: a page-long cord under the header, revealed left → right
+   by the scroll position itself (CSS scroll-driven animation, no JS). Animates
+   clip-path rather than stroke-dashoffset: with vector-effect="non-scaling-stroke"
+   Chrome doesn't scale dashes by pathLength, so the dash trick draws garbage here.
+   Where scroll timelines are unsupported it simply isn't shown. */
+.scroll-cord {
+  display: none;
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-cord {
+      display: block;
+      animation: scroll-cord linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+@keyframes scroll-cord {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Card-row reveal — speakPolish's "thrown deck" settling into place (research.md §4b).
+   Replaces the GSAP StaggerReveal on the real site: a CSS view-timeline does the same
+   job with zero JS, which keeps GSAP + ScrollTrigger out of the Home bundle entirely
+   (Tier 2 JS budget, architecture.md §4). Unsupported browsers / reduced motion just
+   show the cards in place. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-deck > * {
+      animation: deck-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 70%;
+    }
+    .reveal-deck > :nth-child(even) {
+      --deck-from: 2.5deg;
+    }
+  }
+}
+@keyframes deck-in {
+  from {
+    opacity: 0;
+    translate: 0 32px;
+    rotate: var(--deck-from, -2.5deg);
+  }
+}
+
+/* Language cards: the speakPolish "thrown deck" — rotated and overlapping from 1024px,
+   straight and stacked below it so nothing is cut off on a phone. */
+.deck-card {
+  transition: transform var(--timing-standard) var(--ease-back);
+}
+@media (min-width: 1024px) {
+  .deck-card {
+    transform: rotate(var(--tilt, 0deg));
+  }
+  .deck-card:hover,
+  .deck-card:focus-within {
+    z-index: 5;
+    transform: rotate(0deg) translateY(-12px);
+  }
+}
+
+/* Magic UI Marquee runs an infinite CSS animation; the global reduced-motion rule
+   above would shorten it to 0.01ms and make it flicker, so stop it outright. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none !important;
+  }
+}
+
+/* Mobile sticky CTA bar reserves its own space so it never covers the footer. */
+.has-mobile-cta {
+  padding-bottom: 84px;
+}
+@media (min-width: 1024px) {
+  .has-mobile-cta {
+    padding-bottom: 0;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
 }

@@ -1,8 +1,10 @@
 # Outubro Idiomas — website rebuild
 
-**Status:** scaffold in progress. No real page content yet — see `docs/tasks/TASK-preview-page.md`
-(a brand/motion preview page, in progress) and `docs/tasks/TASK-scaffold.md` (the full
-Next.js + Payload + Postgres + Vercel Blob foundation, proposed, not yet aligned).
+**Status (2026-09-13):** Home (`/`) is live in code with its 10 code-owned sections —
+`docs/tasks/TASK-home-static.md`. Testimonials, pricing and FAQ wait for Payload
+(`docs/tasks/TASK-scaffold.md`, not yet executed). Copy marked `[CONTENT]` in `content/home.ts`
+is draft wording pending `docs/client-content-request.md`. The approved planning document stays at
+`/apresentacao` (noindex).
 
 Read `CLAUDE.md` first, then `docs/research.md` → `docs/architecture.md` →
 `docs/visual-identity-spec.md`.

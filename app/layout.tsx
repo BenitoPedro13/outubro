@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { manrope } from "@/lib/fonts";
+import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  // Live preview deploy — docs/tasks/TASK-preview-page.md. Needed so the
-  // opengraph-image route resolves to an absolute URL for real link previews
-  // instead of defaulting to localhost.
-  metadataBase: new URL("https://outubroidiomas.vercel.app"),
+  // Absolute base so per-route OG images and canonicals resolve (lib/site-url.ts).
+  metadataBase: new URL(siteUrl),
   title: "Outubro Idiomas",
   description: "Bora destravar sua língua e seu futuro?",
 };

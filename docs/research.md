@@ -160,10 +160,28 @@ theme, not brand-authored).
   scales, forbidden-pattern list) is followed regardless of framework — none of it is
   Astro-specific.
 
+### Client approval, 2026-09-13
+
+The client reviewed the `/apresentacao` planning document (commit `cd1dd8e`) and gave Benito the
+go-ahead to start development. The approval covers **what that document presented**, and
+nothing more:
+
+- §01-04: brand context, the diagnosis of the current site, the reference takeaways, and the
+  four core decisions (elevation not rebrand · mobile/SEO before spectacle, Tier 2 motion ·
+  full-bleed notebook grid · Next.js + Payload scoped to pricing/testimonials/FAQ).
+- §05: the seven-page structure (Home, Preços, Método, Depoimentos, FAQ, Trabalhe conosco,
+  Contato), each a real route → **resolves Q1** below.
+- §06: the palette as shown (7 swatches, `visual-identity-spec.md` §4 values) and the
+  untangling-cord signature interaction.
+
+**Not covered** — the presentation listed these as open (§08) and the client's "ok" didn't
+answer them: Q2, Q3, Q4, Q5 below stay open.
+
 ## 6. Open questions (unblock before the affected work starts)
 
-- **Q1**: Which pages get full standalone routes vs. stay as sections on one landing page?
-  Proposed structure in `architecture.md` §1 — needs sign-off before build.
+- ~~**Q1**: Which pages get full standalone routes vs. stay as sections on one landing page?~~
+  **Resolved 2026-09-13** — client approved `architecture.md` §1's structure as presented in
+  `/apresentacao` §05 (see §5 above). `/blog` stays conditional on Q2.
 - **Q2**: Does the free-materials library (`outubro.link/biblioteca`) and the Blogspot blog get
   rebuilt on-domain, or stay as external links from the new site? Affects the SEO story (an
   external blog earns the *old* domain the SEO value, not the new one).

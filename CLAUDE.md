@@ -21,13 +21,16 @@ having the right content, §3 for the visual identity that already exists and mu
 (not replaced), §4 for the reference analysis (Babbly is the primary reference, client's
 favorite; speakPolish secondary), §5 for decisions made 2026-09-09, §6 for open questions.
 
-**Status (2026-09-09): specs written, no code yet.** `docs/architecture.md` (page structure,
-Payload scope, motion tier decision, SEO plan, stack) and `docs/visual-identity-spec.md` (brand
-metaphors, signature interaction, type/color/doodle-layer system — produced via the
-`awwwards-v8` skill's Invention Gate, `.agents/skills/masalale-awwwards-designer/`) are both
-proposals awaiting sign-off, not built systems. **Content selection (final copy, which
+**Status (2026-09-13): specs approved by the client; Home built (code-owned sections).**
+`docs/architecture.md` (page structure, Payload scope, motion tier decision, SEO plan, stack) and
+`docs/visual-identity-spec.md` (brand metaphors, signature interaction, type/color/doodle-layer
+system — produced via the `awwwards-v8` skill's Invention Gate,
+`.agents/skills/masalale-awwwards-designer/`) were approved as presented in `/apresentacao`
+(`research.md` §5). `/` now ships 10 of the 13 Home sections (`TASK-home-static.md`); testimonials,
+pricing and FAQ wait for Payload (`TASK-scaffold.md` → `TASK-home-cms.md`). **Content selection (final copy, which
 testimonials, current-year pricing figures) is explicitly deferred** — these specs define
-structure and system, not content; that's a follow-up pass once the specs are approved.
+structure and system, not content; that pass is now open with the client
+(`docs/client-content-request.md`).
 
 ### The one thing to keep in mind while building
 
@@ -60,8 +63,8 @@ instead).
 | CMS | Payload — **not yet installed** | **scoped narrowly** once it lands: media/blob storage + 4 light collections (pricing, testimonials, FAQ, team) — not a full page-builder CMS. This is "mostly a landing page," the editable surface is genuinely small. |
 | Database | PostgreSQL — **not yet installed** | Payload's Postgres adapter |
 | Media | **Vercel Blob** (`@payloadcms/storage-vercel-blob`) — **not yet installed** | per the client's explicit instruction — this is the concrete reason Payload is in the stack at all right now |
-| Styling | **Tailwind 4.3.3** + shadcn/ui primitives (shadcn not yet initialized) | shadcn chosen because Magic UI's components assume it |
-| Animation | **GSAP 3.15.0** + **Lenis 1.3.26** (**Tier 2**, `awwwards-v8` skill) + selected **React Bits** / **Magic UI** components (neither installed yet) | Tier 3 (WebGL) deliberately rejected — see `docs/architecture.md` §4. Use React Bits (reactbits.dev) and Magic UI (magicui.design) *where they fit*, not wholesale — verify exact component names/props against their live docs before use, never invent one (see §5 below). |
+| Styling | **Tailwind 4.3.3** + **shadcn 4.21.0** (`radix-nova` style, `radix-ui` 1.6.7, `cn` 0.3.0, `tw-animate-css` 1.4.0) · icons **lucide-react 1.45.0** | shadcn chosen because Magic UI's components assume it. Its semantic tokens (`--background`, `--primary`, …) are mapped onto the brand tokens in `app/globals.css` — light only, no `.dark` block. Its generated `button.tsx` was removed (uses `transition-all`, a Tier 1 anti-pattern); CTAs are `components/site/cta-link.tsx`. |
+| Animation | **GSAP 3.15.0** + **Lenis 1.3.26** (**Tier 2**, `awwwards-v8` skill) + selected **React Bits** / **Magic UI** components (Magic UI `Marquee` installed via `shadcn add @magicui/marquee`; React Bits not yet used) | Tier 3 (WebGL) deliberately rejected — see `docs/architecture.md` §4. Use React Bits (reactbits.dev) and Magic UI (magicui.design) *where they fit*, not wholesale — verify exact component names/props against their live docs before use, never invent one (see §5 below). |
 | Forms | Two hand-built typed forms (contact/lead, careers) — not yet built | persisted + emailed, never email-only |
 | Email | `[VERIFY: no transactional provider chosen yet]` | |
 | Analytics | `[VERIFY: not chosen yet]` | recommend cookieless (Plausible/self-hosted Umami) to avoid a cookie-banner requirement, but this project's own call |

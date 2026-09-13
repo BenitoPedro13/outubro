@@ -1,5 +1,5 @@
 import { meta } from "@/content/outubro-pitch";
-import { StarBurst } from "@/components/preview/doodles";
+import { StarBurst } from "@/components/site/doodles";
 import { RotatingBadge } from "./rotating-badge";
 import { DocContainer, Label } from "./bits";
 
