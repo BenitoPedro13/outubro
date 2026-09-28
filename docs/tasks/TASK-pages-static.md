@@ -1,6 +1,7 @@
 # TASK-pages-static — every page built first, the CMS plugged in afterwards
 
-Status: **aligned 2026-09-28; in progress.** Done: §2.3 routing (see "Progress" at the end). Supersedes the narrower "pages that need no
+Status: **aligned 2026-09-28; in progress.** Done: §2.3 routing and the Payload spike (see
+"Progress" at the end). Supersedes the narrower "pages that need no
 CMS" scope in `roadmap.md` step 3. User direction 2026-09-28: build all pages first, apply the
 CMS on them afterwards, and "find a workaround so [`/admin`] doesn't break".
 
@@ -124,16 +125,17 @@ under `pnpm lint`, which would only catch it when someone remembers to lint.
 - *`X-Robots-Tag: noindex` header.* Applies to `/admin` too, which is what we want (and stays
   wanted after launch: the launch task scopes the header to `/admin` and `/api` instead of
   dropping it).
-- *`withPayload(nextConfig)`.* Wraps our config. `[VERIFY: at install, confirm withPayload
-  preserves our rewrites/redirects/headers — build, then curl /admin, /api/users, /metodo,
-  /en/method]`.
+- *`withPayload(nextConfig)`.* Wraps our config. **Verified by the spike (2026-09-28):**
+  rewrites, redirects and headers survive it; `/admin`, `/api/users`, `/metodo`, `/en/method`
+  all answer correctly (`TASK-scaffold.md`, "Spike 2026-09-28").
 - *Fallback if something still collides:* Payload's config lets the admin and API move
   (`routes.admin`, `routes.api`, `[VERIFY: exact option names in current Payload docs]`), e.g.
   to `/painel`. Not planned, just the escape hatch.
 
-**Spike to prove it before the CMS task, not after.** Once this task's routing lands, a
-throwaway branch installs Payload per its manual-install docs against the Neon `outubro-db`
-development branch and checks: `/admin` loads, `/api/users` answers, every localized page still
+**Spike to prove it before the CMS task, not after.** **Done 2026-09-28, passed.** Ran against
+a local Postgres container instead of Neon: `outubro-db` has no dev branch, and spike tables
+would have landed in production's database. Once this task's routing lands, a
+throwaway branch installs Payload per its manual-install docs and checks: `/admin` loads, `/api/users` answers, every localized page still
 returns 200 in all three locales, `/pt/metodo` still redirects. The branch is discarded; the
 findings go into `TASK-scaffold.md`. This keeps the one risky integration from landing right
 before launch.
@@ -250,3 +252,11 @@ Verified with temporary stub pages in all 7 folders (deleted before commit), `pn
 - On `/en/method` the switcher links to `/metodo`, `/en/method`, `/es/metodo`.
 - Guard: adding `x: { pt: "/api", en: "/en", … }` throws `routes.x.pt (/api): "api" is
   reserved` and `routes.x.en (/en/en): "en" is reserved`; reverted.
+
+### 2026-09-28: Payload spike (§2.3)
+
+Passed; nothing in the routing had to change. Full setup, results and the six install findings
+(graphql pin, `"type": "module"`, `pool` not `url`, esbuild approval, migrations under
+`next start`, the `withPayload` experimental flag) are in `TASK-scaffold.md`, "Spike
+2026-09-28". Branch `spike/payload-routing` and its Postgres container deleted; `main`
+unchanged by the spike.

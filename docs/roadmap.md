@@ -43,8 +43,10 @@ Each step's blockers are listed; everything else can start right away.
 `gru1` São Paulo, Neon auth off since Payload has its own) and **Vercel Blob** store
 `outubro-media` (public, `gru1`), both connected to production/preview/development. Env vars in
 the Vercel project and pulled to the gitignored `.env.local`: `DATABASE_URL` (+ unpooled/`PG*`/
-`POSTGRES_*` variants) and `BLOB_READ_WRITE_TOKEN`. Still to add: `PAYLOAD_SECRET`, and set
-the functions region to `gru1` so functions sit next to the database.
+`POSTGRES_*` variants) and `BLOB_READ_WRITE_TOKEN`. Still to add: `PAYLOAD_SECRET`, set
+the functions region to `gru1` so functions sit next to the database, and **a Neon development
+branch** for local/preview work: today development and preview point at production's database
+(found by the 2026-09-28 spike, `TASK-scaffold.md`).
 
 - Link the repo to the Vercel project (`vercel link`), provision **Neon Postgres** via the Vercel
   Marketplace (`vercel integration add neon`) and a **Vercel Blob** store, then `vercel env pull`.
@@ -85,7 +87,8 @@ follows is what it still covers:
 ### 3. `TASK-pages-static`: every page, built first
 Scope widened 2026-09-28: all pages, including the CMS-bound ones on stand-ins, plus the
 `/admin`-safe routing (explicit per-page rewrites from a slug map, never a catch-all) and a
-throwaway Payload spike that proves `/admin` and the localized pages coexist. Full plan in
+throwaway Payload spike that proves `/admin` and the localized pages coexist (**passed
+2026-09-28**; install findings in `TASK-scaffold.md`). Full plan in
 `docs/tasks/TASK-pages-static.md`.
 - `/metodo`: brand essence, the three pillars in depth, the Communicative Approach, how classes
   run. Built from the brandbook's own words.

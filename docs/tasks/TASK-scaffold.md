@@ -14,6 +14,60 @@ documented **manual install** path instead (`pnpm add payload @payloadcms/next` 
 then the documented `payload.config.ts` / `withPayload` snippets) — still 100% sourced from
 Payload's own current docs, just not the wizard.
 
+## Spike 2026-09-28: Payload next to the localized routes (`TASK-pages-static.md` §2.3)
+
+A throwaway branch (`spike/payload-routing`, deleted) installed Payload by the manual-install
+docs (payloadcms.com/docs/getting-started/installation) on top of `e9bcdf5`, the commit that
+added the per-page rewrites. **Result: `/admin` and `/api` coexist with the localized pages, no
+routing change needed.** Recorded here because it's what this task's install must repeat.
+
+**Setup**: `payload`, `@payloadcms/next`, `@payloadcms/richtext-lexical`,
+`@payloadcms/db-postgres` **3.90.2**, `sharp` 0.35.4; `app/(payload)` copied from the blank
+template **at tag `v3.90.2`** (the `3.x` branch tracks unreleased HEAD with `workspace:*`
+versions, the version-drift trap noted in §3); `withPayload(nextConfig)`; `@payload-config`
+path alias; config with a `users` auth collection and localization `pt`/`en`/`es`. Database: a
+throwaway local `postgres:16-alpine` container, **not Neon** (see below).
+
+**Install findings the real install must apply** (the docs page didn't warn about any of these):
+
+1. **`graphql` must be pinned to `^16.8.1`.** A bare `pnpm i graphql` installs 17.x, which
+   Payload 3.90.2 and `graphql-scalars` don't accept (`pnpm peers check` fails).
+2. **`"type": "module"` in `package.json` is required**, even with a `.ts` Next config: without
+   it the Payload CLI (`payload migrate:create`) loads `payload.config.ts` as CommonJS and dies
+   with `ERR_REQUIRE_ASYNC_MODULE` (top-level await in `@payloadcms/richtext-lexical`). Build and
+   lint passed with it set (lint: 0 errors).
+3. **The docs' `postgresAdapter({ url })` doesn't exist in 3.90.2.** The adapter takes
+   `pool: { connectionString }` (a `pg` `PoolConfig`), per its own `dist/types.d.ts`.
+4. **pnpm 11 blocks on esbuild's install script** (pulled in by `drizzle-kit` and `tsx`):
+   `pnpm-workspace.yaml` `allowBuilds` gets an `esbuild: set this to true or false`
+   placeholder and every `pnpm` script fails until it's decided. The spike set `true`
+   (esbuild's script only checks its native binary). Decide it in this task.
+5. `next start` doesn't create tables (dev mode pushes, production doesn't): the spike used
+   `payload migrate:create` + `payload migrate`, the workflow `CLAUDE.md` §2.1 already requires.
+6. `withPayload` adds `experimental.turbopackServerFastRefresh` (shown as off in the build).
+   Our `rewrites`/`redirects`/`headers`/`globalNotFound` survived the wrapper unchanged.
+
+**Results** (`pnpm build` + `pnpm start`, `curl`):
+
+- `/admin` 200 ("Dashboard"), `/admin/login` 200, `/admin/create-first-user` 200.
+  `POST /api/users/first-register` created a user; `POST /api/users/login` returned a token;
+  `GET /api/users` → 403 without it, 200 with the user list with it; `/api/users/me` 200 JSON;
+  `/api/nope` 404 JSON (Payload's, not the site's). `/api/graphql-playground` 404 (Payload turns
+  it off in production).
+- All 24 localized page URLs 200 with the right page and `<html lang>` (stub pages);
+  `/pt/metodo` → `/metodo` and `/en/metodo` → `/en/method` 308; `/pt/admin` and `/nope` →
+  the site's global 404.
+- `/admin` still gets `X-Robots-Tag: noindex, nofollow`.
+- CSS doesn't leak between root layouts: the site pages load only the site's CSS (with the
+  `--color-*` tokens); `/admin/login` loads only Payload's (~290 KB), none of the site's.
+
+**Why not Neon**: `outubro-db` is a single database connected to production, preview *and*
+development (roadmap step 1), with no separate dev branch. Payload creates tables on first run,
+so pointing a throwaway spike at it would have left spike tables and a spike admin user in the
+production database. Routing doesn't depend on the database. For this task, create a Neon
+**development branch** (or a local container) before running Payload against anything but
+production.
+
 ## 1. Current scenario
 
 The repo (`github.com/BenitoPedro13/outubro`, `main` branch, commit `060d0b8`) currently
