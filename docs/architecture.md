@@ -192,8 +192,19 @@ default and most damaging to this brand specifically):
   rebuild absorbs the English mirror as a locale and adds Spanish: PT (default) at `/`, EN at
   `/en`, ES at `/es` (only these three — the user dropped DE/FR). Every page emits its own
   canonical plus `alternates.languages` for `pt-BR`/`en`/`es`/`x-default` (→ PT); the sitemap
-  lists each locale with its siblings. `/pt/*` 308-redirects to the unprefixed URL. No
-  `Accept-Language` redirect — the header/footer switcher is explicit.
+  lists each locale with its siblings. No `Accept-Language` redirect — the header/footer
+  switcher is explicit and links to the current page's twin.
+- **Localized slugs**: **resolved 2026-09-28** (`TASK-pages-static.md` §2.3). The `routes` map
+  in `content/i18n.ts` is the only place a URL is written: `/precos` · `/en/pricing` ·
+  `/es/precios`, `/metodo` · `/en/method` · `/es/metodo`, `/depoimentos` · `/en/testimonials` ·
+  `/es/testimonios`, `/faq` · `/en/faq` · `/es/preguntas-frecuentes`, `/contato` ·
+  `/en/contact` · `/es/contacto`, `/trabalhe-conosco` · `/en/careers` ·
+  `/es/trabaja-con-nosotros`, `/politica-de-privacidade` · `/en/privacy-policy` ·
+  `/es/politica-de-privacidad`. Pages live at `app/[lang]/<key>/`; `next.config.ts` gets one
+  exact rewrite (public → `/{locale}/<key>`) and one 308 redirect (internal → public) per page
+  and locale, never a catch-all, so `/admin` and `/api` reach Payload untouched. A guard in
+  `lib/localized-routes.ts` stops `next dev`/`next build` if a slug starts with `admin`, `api`,
+  `_next`, `apresentacao` or a locale code, or collides with another page.
 
 ## 6. Stack
 

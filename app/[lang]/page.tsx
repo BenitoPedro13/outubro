@@ -15,11 +15,11 @@ import { CtaFinal } from "@/components/site/home/cta-final";
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const { seo } = await getDictionary();
-  const url = localePath(locale);
+  const url = localePath(locale, "home");
   return {
     title: { absolute: seo.title },
     description: seo.description,
-    alternates: { canonical: url, languages: languageAlternates() },
+    alternates: { canonical: url, languages: languageAlternates("home") },
     openGraph: {
       type: "website",
       locale: ogLocale[locale],

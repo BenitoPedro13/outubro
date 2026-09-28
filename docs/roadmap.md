@@ -93,9 +93,10 @@ throwaway Payload spike that proves `/admin` and the localized pages coexist. Fu
   (recommended: WhatsApp is the real enrolment channel, and a form adds a data-collection
   surface plus an email dependency for no conversion gain).
 - `/politica-de-privacidade`: draft, flagged for legal review. Must exist before any form ships.
-- **Localized URLs** (recommended): `/metodo` · `/en/method` · `/es/metodo`, via a slug map in
-  `content/i18n.ts` + rewrites, so EN/ES URLs read naturally. Needs the general PT rewrite
-  (`/:path` → `/pt/:path`) that only `/` has today.
+- **Localized URLs** — **done 2026-09-28**: `/metodo` · `/en/method` · `/es/metodo`, from the
+  `routes` map in `content/i18n.ts`; `lib/localized-routes.ts` turns it into one exact rewrite
+  and one redirect per page and locale. No general `/:path` → `/pt/:path` rewrite: that
+  catch-all is what would have broken `/admin` (task doc §2.3).
 - Each page gets its own title, description, canonical, hreflang, OG image and sitemap entry.
 - **Navigation for a multi-page site** (gap found 2026-09-28): today the header only has Home
   anchors (`#metodo`…) and phones get no nav at all. Once real pages exist, the header links to

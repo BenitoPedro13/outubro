@@ -1,6 +1,6 @@
 # TASK-pages-static — every page built first, the CMS plugged in afterwards
 
-Status: **proposed 2026-09-28, awaiting alignment.** Supersedes the narrower "pages that need no
+Status: **aligned 2026-09-28; in progress.** Done: §2.3 routing (see "Progress" at the end). Supersedes the narrower "pages that need no
 CMS" scope in `roadmap.md` step 3. User direction 2026-09-28: build all pages first, apply the
 CMS on them afterwards, and "find a workaround so [`/admin`] doesn't break".
 
@@ -106,9 +106,11 @@ Anything not in the map (`/admin`, `/api/*`, `/_next/*`, files in `public/`) is 
 `localePath()`, `languageAlternates()`, the language switcher and the sitemap all read the same
 map, so a URL exists in exactly one place.
 
-A build-time guard in the same file: a unit-style assertion (run by `pnpm lint` via a tiny
-`scripts/check-routes.ts`, or a top-level throw in `next.config.ts`; picked at implementation)
-fails if any localized slug's first segment is `admin`, `api`, `pt`, `en` or `es`.
+A build-time guard fails if any localized slug's first segment is `admin`, `api`, `_next`,
+`apresentacao`, `pt`, `en` or `es`, or if two pages share a URL. *Picked at implementation:*
+`assertRoutes()` in `lib/localized-routes.ts`, called at the top of `next.config.ts`, so both
+`next dev` and `next build` refuse to start. *Rejected:* a separate `scripts/check-routes.ts`
+under `pnpm lint`, which would only catch it when someone remembers to lint.
 
 **The other ways `/admin` could break, and why they don't:**
 
@@ -167,8 +169,9 @@ collection in all three locales, delete the stand-in arrays.
 | `lib/faqs.ts`, `lib/testimonials.ts` | new | stand-in data + `getFaqs` / `getTestimonials` |
 | `lib/pricing.ts` | edit | 2027 rows for `/precos` |
 | `content/i18n.ts` | edit | `routes` slug map; `localePath` takes a route key |
-| `next.config.ts` | edit | per-route rewrites/redirects generated from the map |
-| `scripts/check-routes.ts` (or inline) | new | reserved-segment guard |
+| `next.config.ts` | edit | calls the generators + guard below |
+| `lib/localized-routes.ts` | new | `localizedRewrites()`, `localizedRedirects()`, `assertRoutes()` |
+| `components/site/language-switcher.tsx`, `components/site/language-links.tsx` | edit/new | switcher links to the current page's twin |
 | `app/[lang]/{precos,metodo,depoimentos,faq,contato,trabalhe-conosco,politica-de-privacidade}/page.tsx` | new | one per page, with `generateMetadata` |
 | `app/[lang]/.../opengraph-image.tsx` | new | per page |
 | `app/[lang]/page.tsx`, `components/site/home/*` | edit | Depoimentos + FAQ sections |
@@ -183,7 +186,7 @@ collection in all three locales, delete the stand-in arrays.
 ## 5. Verification
 
 - `pnpm build` and `pnpm lint` pass.
-- Every route in the slug map returns 200 at its PT, EN and ES URL; each `/pt/...` URL 301s to
+- Every route in the slug map returns 200 at its PT, EN and ES URL; each internal `/{locale}/<key>` URL 308s to
   its unprefixed twin; an unknown path returns the global 404.
 - `/admin` and `/api/anything` are **not** rewritten: before Payload exists they return the
   global 404 (not a `[lang]` page, not a redirect to `/pt/...`). Checked with `curl -I`.
@@ -209,3 +212,41 @@ collection in all three locales, delete the stand-in arrays.
   (`client-content-request.md`).
 - `/blog` (`research.md` §6 Q2 still open).
 - `teamMembers` and teacher photos (no consent yet).
+
+## Progress
+
+### 2026-09-28: routing (§2.3)
+
+- `content/i18n.ts`: `routes` map (8 entries incl. `home`), `RouteKey`, `localePath(locale,
+  route)`, `internalPath`, `languageAlternates(route)`, `routeFromPath`.
+  Slugs: `/precos` · `/en/pricing` · `/es/precios`; `/metodo` · `/en/method` · `/es/metodo`;
+  `/depoimentos` · `/en/testimonials` · `/es/testimonios`; `/faq` · `/en/faq` ·
+  `/es/preguntas-frecuentes`; `/contato` · `/en/contact` · `/es/contacto`; `/trabalhe-conosco` ·
+  `/en/careers` · `/es/trabaja-con-nosotros`; `/politica-de-privacidade` · `/en/privacy-policy`
+  · `/es/politica-de-privacidad`. `[CONTENT]` for EN/ES: the client may prefer others; changing
+  one is a one-line edit.
+- Redirects are now **exact** per page (`/pt/metodo` → `/metodo`), replacing the old
+  `/pt/:path((?!opengraph-image).*)` pattern: per-page OG image routes
+  (`/pt/metodo/opengraph-image/…`) are never caught, with no regex exclusion to maintain.
+  A stray `/pt/anything-else` now 404s instead of redirecting to a 404.
+- Language switcher: a client leaf (`language-links.tsx`) reads `usePathname()` and maps it to a
+  route key. Under a rewrite the server prerenders with the internal path and the browser has the
+  public one (Next's use-pathname docs, "Avoid hydration mismatch with rewrites"); both map to
+  the same key, so the markup matches and no after-mount fallback is needed.
+- Sitemap lists every key in the map × 3 locales (24 URLs). Until each page lands, the
+  not-yet-built ones 404; harmless while the site is `noindex` and this task isn't merged to a
+  launch.
+
+Verified with temporary stub pages in all 7 folders (deleted before commit), `pnpm build` +
+`pnpm start`, `curl`:
+
+- All 24 public URLs: 200, the right page, the right `<html lang>`.
+- `/pt` → `/`, `/pt/metodo` → `/metodo`, `/en/metodo` → `/en/method`, `/es/precos` →
+  `/es/precios`, `/en/politica-de-privacidade` → `/en/privacy-policy`: 308.
+- `/admin`, `/admin/login`, `/api`, `/api/users`, `/pt/admin`, `/nope`, `/en/nope`: 404 from
+  `global-not-found.tsx` (its `<title>`, no site `<main>`), no redirect. `/admin` carries
+  `X-Robots-Tag: noindex, nofollow`.
+- Home og:image (`/pt/opengraph-image/og?…`): 200, not redirected.
+- On `/en/method` the switcher links to `/metodo`, `/en/method`, `/es/metodo`.
+- Guard: adding `x: { pt: "/api", en: "/en", … }` throws `routes.x.pt (/api): "api" is
+  reserved` and `routes.x.en (/en/en): "en" is reserved`; reverted.
