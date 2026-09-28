@@ -65,6 +65,8 @@ the functions region to `gru1` so functions sit next to the database.
 ### 2. `TASK-home-cms`: Home reads from Payload
 - `lib/pricing.ts` body → Payload query. 2026 + 2027 rows seeded once (initial seed only; edits
   happen in the admin panel afterwards).
+- **`Course`/`Service` structured data** for the language offer (open `[VERIFY]` in
+  `architecture.md` §5: check current schema.org/Google guidance first).
 - **FAQ section** on the Home (curated 5-6, accordion from a vetted primitive: shadcn/Radix
   Accordion, not hand-rolled) + `FAQPage` JSON-LD.
 - **Depoimentos section**, visible from day one with the openly-placeholder entries (see
@@ -86,6 +88,12 @@ the functions region to `gru1` so functions sit next to the database.
   `content/i18n.ts` + rewrites, so EN/ES URLs read naturally. Needs the general PT rewrite
   (`/:path` → `/pt/:path`) that only `/` has today.
 - Each page gets its own title, description, canonical, hreflang, OG image and sitemap entry.
+- **Navigation for a multi-page site** (gap found 2026-09-28): today the header only has Home
+  anchors (`#metodo`…) and phones get no nav at all. Once real pages exist, the header links to
+  them (anchors only on the Home), the footer gets a sitemap column, and phones get a menu built
+  on a vetted accessible primitive (shadcn Sheet / Radix Dialog), not a hand-rolled toggle.
+- **Icons** (gap): `app/icon.png` is the 1080px, 38 KB symbol PNG. Replace it with an `icon.svg`
+  from the traced symbol, plus an `apple-icon.png` and a web manifest.
 
 ### 4. `TASK-pages-cms`: pages fed by Payload
 - `/precos`: the full 2026 table and the 2027 comparison + "entenda o reajuste" copy (drafted).
@@ -101,6 +109,12 @@ the functions region to `gru1` so functions sit next to the database.
 - **Blocked by:** steps 1 and 3 (privacy policy), plus the client's email address for
   notifications.
 
+### 5b. `TASK-cms-handoff`: the client can actually use the admin
+- Admin accounts for the client (not shared credentials), with roles if more than one editor.
+- A short PT guide (`docs/guia-do-admin.md`): editing prices, FAQ and testimonials in all three
+  languages, uploading images, and what a "published" change triggers (the page revalidates).
+- Backups: confirm Neon's restore window on the free plan and write down how to restore.
+
 ### 6. `TASK-launch`
 - **Analytics: Vercel Web Analytics.** Cookieless and first-party, so no cookie banner (resolves
   `architecture.md` §6's open item).
@@ -109,14 +123,47 @@ the functions region to `gru1` so functions sit next to the database.
 - Final content pass with the client (every `[CONTENT]` tag), native EN/ES review.
 - Performance budget check at 375/768/1440 (LCP, CLS, JS weight: Tier 2 budget,
   `architecture.md` §4).
+- **WCAG 2.2 AA audit** across every page at 375/768/1440: keyboard-only pass, screen-reader
+  pass (VoiceOver), contrast re-check, reduced-motion check. The standard is non-negotiable
+  (global CLAUDE.md); this is the explicit end-to-end pass, not a replacement for doing it per
+  task.
+- **Conversion measurement**: count WhatsApp CTA clicks per section/locale. Vercel Web
+  Analytics custom events depend on the Vercel plan `[VERIFY: current plan limits]`; decide the
+  tool in the task doc.
+- **Legal footer details**: company name and CNPJ (the privacy policy must name the data
+  controller). Needs the client.
+- **Old-site redirect map**: list the current `outubroidiomas.com` URLs (needs access to the old
+  host or a crawl) and 301 each to its new equivalent.
+- Decide `/apresentacao`'s fate: delete, or keep it noindex behind the preview layout.
+- A smoke test that runs before each deploy: every route returns 200 in all three locales, the
+  forms submit, no page is missing its title/description/hreflang. None exists yet; Playwright
+  is the likely pick, confirmed in the task doc.
 - `SITE_INDEXABLE=true` → redeploy → submit the sitemap in Google Search Console.
+
+## Waiting on the client (not buildable until answered)
+
+Tracked in `client-content-request.md`. None of these block the steps above; they fill them in.
+
+- Real testimonials (replace the placeholders), prices confirmation, 2027 switch date.
+- Native review of EN/ES, and who the EN/ES visitor is.
+- Logo vector files, brandbook §2.2 illustration files.
+- Free-materials library and Blogspot blog: stay external or move on-domain (`research.md` §6
+  Q2)? A `/blog` route exists only if they move.
+- Teacher photos on `/metodo` (`teamMembers`), only with each person's consent.
+- Email address for teacher applications; CNPJ/company name for the legal footer.
+- Domain access for `outubroidiomas.com`.
+
+## Housekeeping
+
+- `docs/Imagens da Outubro/` and the brandbook PDF (20 MB) are untracked: commit or gitignore?
+- `.claude/` and `skills-lock.json` (added by the Neon agent-skill install): commit or ignore?
 
 ## Order and parallelism
 
 ```
-1 scaffold ──► 2 home-cms ──► 4 pages-cms ──┐
-   │                                          ├─► 6 launch
-3 pages-static (starts now, no blockers) ──► 5 careers-form ─┘
+1 scaffold ──► 2 home-cms ──► 4 pages-cms ──► 5b cms-handoff ──┐
+                                                                   ├─► 6 launch
+3 pages-static + nav + icons (starts now) ──► 5 careers-form ─────┘
 ```
 
 Step 3 can run while the user handles the Vercel provisioning for step 1.
