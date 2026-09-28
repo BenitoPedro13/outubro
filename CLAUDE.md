@@ -220,6 +220,7 @@ docs/
   research.md              brand/reference research   ← read first
   architecture.md          page structure, Payload scope, motion tier, SEO plan, stack
   visual-identity-spec.md  brand metaphors, signature interaction, type/color/doodle system
+  roadmap.md               sequenced tasks to launch + content policy + open decisions
   tasks/                   TASK-<slug>.md
 ```
 
