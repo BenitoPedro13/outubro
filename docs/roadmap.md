@@ -29,7 +29,7 @@ Every drafted string gets the existing `[CONTENT]` tag and an entry in
 | Careers form fields | proposed by us | a standard teacher-application set; client confirms |
 | Privacy policy | **drafted by us, marked "needs legal review"** | LGPD structure for exactly the data we collect |
 | Prices 2027 | yes (shown on `/precos` only) | verbatim from the current site capture |
-| **Testimonials** | **no, never invented** | Inventing quotes attributed to students would be fake reviews on a public site. The section and page get built and wired to the CMS, but they **render only when at least one real, published testimonial exists**. The client sends 3-6 real ones (name, language, quote, consent) |
+| **Testimonials** | **visible example cards, never invented quotes** | User decision 2026-09-28: "dont hide, he will change on the admin afterwards". The section and `/depoimentos` render from the CMS from day one, seeded with 3 entries that are **openly placeholders** ("Nome do aluno · Inglês", "Aqui entra o depoimento real de um aluno…"), never fake quotes presented as real students'. The client replaces them in the admin with real ones (name, language, quote, consent) |
 | Team/teacher photos | no | needs real people's consent; `teamMembers` stays deferred |
 
 ## The sequence
@@ -58,7 +58,8 @@ Each step's blockers are listed; everything else can start right away.
   happen in the admin panel afterwards).
 - **FAQ section** on the Home (curated 5-6, accordion from a vetted primitive: shadcn/Radix
   Accordion, not hand-rolled) + `FAQPage` JSON-LD.
-- **Depoimentos section**, hidden until real content exists (see content policy).
+- **Depoimentos section**, visible from day one with the openly-placeholder entries (see
+  content policy); the client swaps in real ones in the admin.
 - On-demand revalidation: Payload `afterChange` hooks revalidate the affected pages in all three
   locales. Pages stay static.
 - Data fetching: Server Components call Payload's Local API through one function per collection
@@ -80,8 +81,7 @@ Each step's blockers are listed; everything else can start right away.
 ### 4. `TASK-pages-cms`: pages fed by Payload
 - `/precos`: the full 2026 table and the 2027 comparison + "entenda o reajuste" copy (drafted).
 - `/faq`: the full list, grouped (Aulas, Pagamento, Reposição, Cancelamento), `FAQPage` JSON-LD.
-- `/depoimentos`: renders once real testimonials exist; until then it's a 404 (not an empty
-  page) and stays out of the sitemap and nav.
+- `/depoimentos`: renders the CMS entries (placeholders until the client replaces them).
 - **Blocked by:** step 1.
 
 ### 5. `TASK-careers-form`: `/trabalhe-conosco`
@@ -112,12 +112,10 @@ Each step's blockers are listed; everything else can start right away.
 
 Step 3 can run while the user handles the Vercel provisioning for step 1.
 
-## Decisions needed from the user
+## Decisions (answered by the user 2026-09-28)
 
-1. **Provisioning**: OK to `vercel link` this repo and add Neon Postgres + a Blob store to the
-   Vercel project? (Unblocks steps 1, 2, 4, 5.)
-2. **Testimonials**: agree the section/page stay hidden until real testimonials arrive, rather
-   than invented placeholders?
-3. **EN/ES URLs**: localized slugs (`/en/method`, recommended) or the same PT slugs under each
-   prefix (`/en/metodo`)?
-4. **Contact**: WhatsApp-only `/contato`, with no contact form (recommended)?
+1. **Provisioning**: yes, link the repo and add Neon Postgres + a Blob store to the Vercel project.
+2. **Testimonials**: don't hide them. Visible, openly-placeholder entries the client replaces in
+   the admin (no invented quotes; see content policy).
+3. **EN/ES URLs**: localized slugs (`/metodo` · `/en/method` · `/es/metodo`).
+4. **Contact**: WhatsApp-only `/contato`, no contact form.
