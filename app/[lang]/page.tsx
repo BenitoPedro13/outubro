@@ -9,7 +9,9 @@ import { Idiomas } from "@/components/site/home/idiomas";
 import { ComoFunciona } from "@/components/site/home/como-funciona";
 import { Pilares } from "@/components/site/home/pilares";
 import { Diferenciais } from "@/components/site/home/diferenciais";
+import { Depoimentos } from "@/components/site/home/depoimentos";
 import { Precos } from "@/components/site/home/precos";
+import { Faq } from "@/components/site/home/faq";
 import { CtaFinal } from "@/components/site/home/cta-final";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -32,8 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// Home — architecture.md §1.1. Depoimentos and FAQ come from Payload and slot in around
-// Precos (TASK-home-cms.md).
+// Home — architecture.md §1.1, all 13 sections (header/footer come from the layout).
+// Depoimentos and FAQ read Payload-shaped stand-ins until TASK-cms.
 export default function HomePage() {
   return (
     <>
@@ -44,7 +46,9 @@ export default function HomePage() {
       <ComoFunciona />
       <Pilares />
       <Diferenciais />
+      <Depoimentos />
       <Precos />
+      <Faq />
       <CtaFinal />
     </>
   );

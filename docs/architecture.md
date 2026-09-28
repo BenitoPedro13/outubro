@@ -41,6 +41,11 @@ description, and OG image, which an anchor (`#faq`) cannot provide.
                        otherwise this route doesn't exist and the nav links out instead]
 ```
 
+These are the PT URLs. EN and ES live under `/en` and `/es` with localized slugs (`/en/method`,
+`/es/precios`, …), all listed once in the `routes` map in `content/i18n.ts`; `next.config.ts`
+turns it into one exact rewrite + redirect per page and locale, never a catch-all, so `/admin`
+and `/api` stay Payload's (`docs/tasks/TASK-pages-static.md` §2.3).
+
 Each supporting page's content **duplicates a subset of the home page's narrative** rather than
 fragmenting it — e.g. `/precos` repeats the pricing table verbatim, it doesn't require a visitor
 to go back to `/` to see it. This is deliberate: a landing page's job is to convert an arriving
@@ -49,7 +54,8 @@ idiomas preço", a WhatsApp-shared link to `/depoimentos`).
 
 ### 1.1 Home page section order
 
-1. **Header** — sticky, logo, anchor links to home sections, primary WhatsApp CTA button.
+1. **Header** — sticky, logo, links to the supporting pages (not Home anchors, since 2026-09-28:
+   the pages exist), language switcher, primary WhatsApp CTA; below 1024px a Sheet menu.
 2. **Hero** — headline ("Bora destravar sua língua e seu futuro?"), subhead, primary CTA,
    signature interaction (visual-identity-spec.md §4 — the untangling-cord motif). This is the
    one section that gets the full motion budget.
@@ -83,7 +89,7 @@ Deliberately narrow (research.md §5). Collections:
 |---|---|---|
 | `media` | Images/video, backed by Vercel Blob | `@payloadcms/storage-vercel-blob`, per stack table |
 | `testimonials` | Student testimonials | name, language studied, quote, optional photo/video |
-| `faqs` | FAQ entries | question, rich-text answer, `order` field |
+| `faqs` | FAQ entries | question, plain-text answer (textarea, paragraphs split on blank lines — `TASK-pages-static.md` §2.1), category, `order`, `featured` |
 | `pricingPlans` | Pricing table rows | format (individual/duo), frequency, price, `effectiveYear` |
 | `teamMembers` | Teachers/staff shown on `/metodo` or footer, if the client wants faces on the site | `[VERIFY: does the client want teacher photos public — not established in research]` |
 

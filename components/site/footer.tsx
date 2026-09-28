@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { fill, getDictionary } from "@/content/dictionaries";
+import { fill, getDictionary, getLocale } from "@/content/dictionaries";
+import { localePath, routeKeys } from "@/content/i18n";
 import { site } from "@/content/site";
 import { Logo } from "./logo";
 import { CtaLink } from "./cta-link";
@@ -8,11 +10,12 @@ import { LanguageSwitcher } from "./language-switcher";
 // The vertical lockup is brandbook §2.1's preferred version; here it's the footer's anchor,
 // big, in §2.3's on-black colourway.
 export async function Footer() {
-  const t = await getDictionary();
+  const [t, locale] = await Promise.all([getDictionary(), getLocale()]);
+  // External links. Careers is now a page (in the sitemap column); its external form link
+  // lives on that page until TASK-careers-form.
   const links = [
     { href: site.library, label: t.footer.links.library },
     { href: site.blog, label: t.footer.links.blog },
-    { href: site.careers, label: t.footer.links.careers },
     { href: site.instagram, label: t.footer.links.instagram },
   ];
 
@@ -22,13 +25,25 @@ export async function Footer() {
         <Logo variant="vertical" inverse className="h-auto w-full max-w-[280px] md:max-w-[360px]" />
 
         <div className="grid gap-12 sm:grid-cols-2 sm:gap-10">
-          <div>
+          <div className="sm:col-span-2">
             <p className="max-w-[34ch] text-lg text-[var(--color-border)]">{t.footer.about}</p>
             <p className="mt-6 text-2xl font-black leading-tight text-[var(--color-lime)]">{t.tagline}</p>
             <div className="mt-8">
               <CtaLink variant="on-dark">{t.footer.cta}</CtaLink>
             </div>
           </div>
+
+          <nav aria-label={t.ui.footerPagesLabel}>
+            <ul className="grid gap-1">
+              {routeKeys.map((route) => (
+                <li key={route}>
+                  <Link href={localePath(locale, route)} className="inline-block py-2 text-lg font-bold leading-snug transition-colors duration-150 hover:text-[var(--color-lime)]">
+                    {t.nav[route]}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           <nav aria-label={t.ui.footerLinksLabel}>
             <ul className="grid gap-1">

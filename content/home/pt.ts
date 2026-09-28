@@ -7,9 +7,9 @@
  *   [CONTENT] — draft wording with no source yet; listed in docs/client-content-request.md,
  *               must be replaced before launch
  *
- * Testimonials and FAQ are NOT here — they come from Payload (TASK-home-cms.md). Pricing
- * figures live in lib/pricing.ts (Payload-shaped, TASK-brand-alignment.md §2.6); only the
- * labels are here.
+ * Testimonials, FAQ and pricing figures are NOT here — they live in lib/testimonials.ts,
+ * lib/faqs.ts and lib/pricing.ts, Payload-shaped until TASK-cms (TASK-pages-static.md §2.1);
+ * only the labels are here. Copy for the other pages is in content/pages/.
  */
 export const pt = {
   seo: {
@@ -23,12 +23,15 @@ export const pt = {
 
   ui: {
     skipLink: "Pular para o conteúdo",
-    homeLabel: "Outubro Idiomas, voltar ao início",
-    navLabel: "Seções",
+    homeLabel: "Outubro Idiomas, página inicial",
+    navLabel: "Principal",
+    menu: "Menu",
+    closeMenu: "Fechar menu",
     opensWhatsapp: "(abre o WhatsApp)",
     opensNewTab: "(abre em nova aba)",
     languageLabel: "Idioma do site",
     footerLinksLabel: "Links da Outubro",
+    footerPagesLabel: "Páginas",
   },
 
   whatsapp: {
@@ -40,12 +43,17 @@ export const pt = {
   // VERBATIM — Instagram bio
   tagline: "Bora destravar sua língua e seu futuro?",
 
-  nav: [
-    { href: "#metodo", label: "Método" },
-    { href: "#idiomas", label: "Idiomas" },
-    { href: "#como-funciona", label: "Como funciona" },
-    { href: "#precos", label: "Preços" },
-  ],
+  // One name per page in the route map (content/i18n.ts) — header, phone menu, footer.
+  nav: {
+    home: "Início",
+    metodo: "Método",
+    precos: "Preços",
+    depoimentos: "Depoimentos",
+    faq: "Dúvidas",
+    contato: "Contato",
+    "trabalhe-conosco": "Trabalhe conosco",
+    "politica-de-privacidade": "Política de privacidade",
+  },
 
   header: {
     cta: "Matricule-se", // VERBATIM — linktr.ee "MATRICULE-SE JÁ"
@@ -206,6 +214,24 @@ export const pt = {
     },
     note: "Não sabe qual escolher? Chama no WhatsApp que a gente te ajuda.", // [CONTENT]
     noteCta: "Tirar dúvida no WhatsApp", // [CONTENT]
+    seeAll: "Ver todos os valores", // [CONTENT]
+  },
+
+  // Entries come from lib/testimonials.ts (Payload-shaped until TASK-cms); only labels here.
+  depoimentos: {
+    title: "Quem destravou, conta", // [CONTENT]
+    lead: "Alunos da Outubro, com as palavras deles.", // [CONTENT]
+    placeholder: "exemplo", // marker on openly-placeholder cards (roadmap.md content policy)
+    languages: { ingles: "Inglês", frances: "Francês", espanhol: "Espanhol", alemao: "Alemão" },
+    seeAll: "Ver todos os depoimentos", // [CONTENT]
+  },
+
+  // Entries come from lib/faqs.ts (Payload-shaped until TASK-cms); only labels here.
+  faq: {
+    title: "Ficou alguma dúvida?", // [CONTENT]
+    lead: "O que a galera mais pergunta antes de começar.", // [CONTENT]
+    categories: { aulas: "Aulas", pagamento: "Pagamento", reposicao: "Faltas e reposição", cancelamento: "Cancelamento" },
+    seeAll: "Ver todas as dúvidas", // [CONTENT]
   },
 
   ctaFinal: {
@@ -219,7 +245,6 @@ export const pt = {
     links: {
       library: "Biblioteca: 200GB de materiais gratuitos", // VERBATIM — linktr.ee
       blog: "Blog",
-      careers: "Quero dar aulas", // VERBATIM — linktr.ee
       instagram: "Instagram",
     },
     // The user's own wording (2026-09-27 review)

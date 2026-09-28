@@ -10,8 +10,8 @@ type MobileCtaBarProps = {
 };
 
 // Phone-only sticky WhatsApp bar (hidden from 1024px). Appears once the hero's own CTA
-// has scrolled away and steps aside while the final CTA band is on screen, so there's
-// never two identical CTAs in view. Syncs with an external system (IntersectionObserver)
+// has scrolled away (pages without a hero: right away) and steps aside while a final CTA
+// band (#cta-final) is on screen, so there's never two identical CTAs in view. Syncs with an external system (IntersectionObserver)
 // — a real Effect, with cleanup. Text comes from the server layout's dictionary.
 export function MobileCtaBar({ label, href, opensWhatsapp }: MobileCtaBarProps) {
   const [visible, setVisible] = useState(false);
@@ -19,9 +19,11 @@ export function MobileCtaBar({ label, href, opensWhatsapp }: MobileCtaBarProps) 
   useEffect(() => {
     const hero = document.getElementById("inicio");
     const finalCta = document.getElementById("cta-final");
-    if (!hero) return;
+    const main = document.getElementById("conteudo");
 
-    let heroInView = true;
+    // No hero on the page (supporting pages) = nothing to wait for. <main> is observed too so
+    // the observer's first callback always fires, even on a page with neither element.
+    let heroInView = Boolean(hero);
     let finalInView = false;
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -30,8 +32,7 @@ export function MobileCtaBar({ label, href, opensWhatsapp }: MobileCtaBarProps) 
       }
       setVisible(!heroInView && !finalInView);
     });
-    observer.observe(hero);
-    if (finalCta) observer.observe(finalCta);
+    for (const el of [hero, finalCta, main]) if (el) observer.observe(el);
     return () => observer.disconnect();
   }, []);
 

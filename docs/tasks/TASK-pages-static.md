@@ -1,7 +1,7 @@
 # TASK-pages-static — every page built first, the CMS plugged in afterwards
 
-Status: **aligned 2026-09-28; in progress.** Done: §2.3 routing and the Payload spike (see
-"Progress" at the end). Supersedes the narrower "pages that need no
+Status: **done 2026-09-28.** Every item in §2 is built and verified (see "Progress" at the end);
+the spike findings are in `TASK-scaffold.md`. Supersedes the narrower "pages that need no
 CMS" scope in `roadmap.md` step 3. User direction 2026-09-28: build all pages first, apply the
 CMS on them afterwards, and "find a workaround so [`/admin`] doesn't break".
 
@@ -260,3 +260,70 @@ Passed; nothing in the routing had to change. Full setup, results and the six in
 `next start`, the `withPayload` experimental flag) are in `TASK-scaffold.md`, "Spike
 2026-09-28". Branch `spike/payload-routing` and its Postgres container deleted; `main`
 unchanged by the spike.
+
+### 2026-09-28: data contract, pages, navigation, icons (§2.1, §2.2, §2.4)
+
+**Built.**
+- `lib/faqs.ts` (10 entries, 6 `featured`), `lib/testimonials.ts` (3 openly-placeholder entries):
+  shapes exactly as §2.1, localized fields resolved inside `getFaqs`/`getTestimonials`, only the
+  functions (and the types + `faqCategories`) exported. FAQ answers come from the client's rules
+  panel (`docs/Imagens da Outubro/Manual calendarios/manual calendarios 1.png`, "Lembretes" +
+  "Reposição ou cancelamento?"), each entry citing its source line. One panel line ("Faz sozinho?
+  Rep em dupla.") is ambiguous and left out: `client-content-request.md` item 3.
+- `lib/pricing.ts`: 2027 rows, verified against the current-site capture, + `NEXT_PRICING_YEAR`.
+- Home: Depoimentos (after Diferenciais) and FAQ (after Preços), per `architecture.md` §1.1; the
+  pricing cards moved to `components/site/pricing-cards.tsx`, shared with `/precos`.
+- Seven pages under `app/[lang]/`, each with `generateMetadata` via `lib/page-metadata.ts` and
+  an `opengraph-image.tsx` via `lib/page-og.ts` (the Home's OG card moved to `lib/og-image.tsx`).
+  `/metodo` reuses the Home's Metodo + Pilares sections and adds the brandbook's essence,
+  purpose, "Experiência da Marca" and values, verbatim. Supporting pages close with the Home's
+  CtaFinal, except contato/careers/privacy.
+- Page copy in `content/pages/<page>/{pt,en,es}.ts`, loaded by `content/pages/index.ts`.
+- Nav: header links to pages (`nav-links.tsx` marks `aria-current`), phone menu on shadcn Sheet
+  (`mobile-nav.tsx`), footer sitemap column from the route map. The footer's external careers link
+  moved onto `/trabalhe-conosco`, which links to the current external form until
+  `TASK-careers-form`.
+- `app/icon.svg` (symbol, 4.8 KB) replaces `app/icon.png` (38 KB); `app/apple-icon.tsx`,
+  `app/manifest.ts`.
+
+**Deviations from the plan.**
+- *Header anchors.* §2.4 said "anchors only when already on the Home". The header links to the
+  real pages everywhere instead: one link set, and the pages carry the same content.
+- *Accordion.* Radix unmounts closed panels, which would drop FAQ answers from the HTML and
+  desync the JSON-LD. `forceMount` keeps them; Radix then doesn't hide them (verified: no
+  `hidden` attribute), so `FaqList` hides `[data-state=closed]` panels from the root. The vendored
+  trigger's `transition-all` is overridden by `transition-colors` through `className` (`cn`
+  merges); the file itself is unedited.
+- *`button.tsx`.* The shadcn CLI re-added it as a Sheet dependency. Kept vendored (Sheet imports
+  it) but never rendered: `showCloseButton={false}`, our own `SheetClose`. CLAUDE.md stack row
+  updated.
+- *Mobile CTA bar.* It waited for the Home hero (`#inicio`) to leave the screen, so on pages
+  without one it never appeared. It now also observes `<main>`: no hero → visible, still stepping
+  aside for any `#cta-final` band.
+- *apple-icon* is generated (`apple-icon.tsx`, ImageResponse) rather than a committed PNG.
+
+**Verified** (`pnpm lint` clean, `pnpm build` 33 static routes, `pnpm start`, curl + headless
+Chrome driven over the DevTools protocol, since the Chrome extension wasn't connected):
+- All 24 public URLs 200 with the right `<html lang>` and a unique `<title>`; every page has its
+  own description, canonical, the pt-BR/en/es/x-default hreflang set and an OG image (5 fetched:
+  200 `image/png`, the 58-character `/metodo` title checked visually). `sitemap.xml`: 24 URLs.
+- `/pt`, `/pt/metodo`, `/pt/faq`, `/en/metodo`, `/es/precos`, `/en/politica-de-privacidade`: 308
+  to the public twin. `/admin`, `/admin/login`, `/api`, `/api/anything`, `/pt/admin`, `/nope`,
+  `/en/nope`: 404 from `global-not-found`, not rewritten.
+- FAQPage JSON-LD on `/faq` (10 questions) and the Home (6): every question and answer
+  paragraph is present in the page HTML; closed panels `display: none`, open on activation
+  (`aria-expanded="true"`). Rich Results Test not run (needs a public URL): do it on the preview
+  deploy.
+- Testimonials: 3 cards with the "exemplo" tag on the Home and `/depoimentos`.
+- 375 / 768 / 1440px, 16 routes across all three locales: no horizontal overflow
+  (`scrollWidth` = viewport).
+- Phone menu at 375px: opens from the keyboard, focus lands inside and stays there through 14
+  Tabs, `aria-current="page"` on the current page, Escape closes it and returns focus to the
+  trigger. Dialog is named "Menu".
+- Mobile CTA bar visible on `/contato` (no hero).
+- Screenshots reviewed: `/precos` and Home Depoimentos at 375px, `/metodo` and `/contato` at
+  1440px, the open menu. The footer's three-column layout wrapped its CTA at 1440px; now the
+  about block spans both link columns.
+
+**Not done here.** A full keyboard-only and screen-reader pass per page stays with
+`TASK-launch`'s WCAG audit; the route-guard failure test was done with the routing (above).

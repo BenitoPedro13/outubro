@@ -9,11 +9,19 @@ confirmação.
 ## Para a Home (bloqueia o lançamento)
 
 1. **Depoimentos.** Quais alunos entram, com nome, idioma estudado e o texto. Pode ter foto ou vídeo?
-   Temos autorização de cada pessoa para publicar?
+   Temos autorização de cada pessoa para publicar? *(28/09: a Home e `/depoimentos` já mostram 3
+   cartões marcados "exemplo", sem texto inventado; os reais entram no painel quando o CMS estiver no ar.)*
 2. **Preços.** A Home já mostra a tabela 2026 do site atual (individual R$520 / 935 / 1.400;
    dupla R$350 / 650 / 950, por aluno/mês). Confirmar os valores. Quando trocamos para a de 2027
    (R$570 / 1.000 / 1.520; dupla R$375 / 650 / 950)? E o texto do "Clique aqui e entenda o reajuste"?
-3. **FAQ.** Quais perguntas e respostas. O site atual não tem uma lista.
+   *(28/09: `/precos` já mostra 2026 e 2027 lado a lado, com um texto de reajuste nosso, baseado em
+   "Professor valorizado = aulas melhores". Falta a data da troca e o texto de vocês.)*
+3. **FAQ.** *(28/09: escrevemos 10 perguntas a partir do quadro "Lembretes / Reposição ou
+   cancelamento?" do manual de calendários de vocês e dos diferenciais do site; estão em `/faq`,
+   6 delas na Home.)* Confirmar: (a) as respostas estão certas e podem ser públicas? (b) o quadro
+   diz "Faz aula em dupla? Rep com a dupla. Faz sozinho? Rep em dupla." — a segunda parte quer
+   dizer que quem faz aula individual repõe numa turma em dupla? Deixamos só a primeira parte até
+   confirmar. (c) a forma de pagamento é sempre boleto?
 4. **"Como funciona" em 3 passos.** Não existe no site atual. Sugestão: *teste de nível → plano de
    aulas → conversação desde a primeira aula*. Está certo? Querem outras palavras?
 5. **Mensagem pronta do WhatsApp.** Quando a pessoa clica em "Matricule-se", o WhatsApp já abre
@@ -42,3 +50,11 @@ confirmação.
     aprendendo português, brasileiro no exterior, ou outro? Isso muda o texto. O link antigo
     "WEBSITE IN ENGLISH" pode apontar para `/en`.
 14. **Domínio**: o site novo substitui o `outubroidiomas.com`?
+16. **E-mail de contato**: querem um e-mail na página `/contato`? Hoje ela tem só WhatsApp e Instagram.
+17. **Razão social e CNPJ**: a política de privacidade (`/politica-de-privacidade`, rascunho) precisa
+    nomear a empresa responsável pelos dados. O texto também precisa de revisão jurídica.
+18. **Endereços em inglês e espanhol**: usamos `/en/method`, `/en/pricing`, `/es/precios`,
+    `/es/preguntas-frecuentes` etc. Se preferirem outros, a troca é simples.
+19. **Textos novos das páginas** (Método, Contato, Trabalhe conosco, Depoimentos): o Método usa as
+    palavras do brandbook (essência, propósito, valores); o resto é rascunho nosso, marcado para
+    vocês revisarem.

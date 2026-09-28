@@ -16,12 +16,15 @@ export const en: Dictionary = {
 
   ui: {
     skipLink: "Skip to content",
-    homeLabel: "Outubro Idiomas, back to top",
-    navLabel: "Sections",
+    homeLabel: "Outubro Idiomas, home page",
+    navLabel: "Main",
+    menu: "Menu",
+    closeMenu: "Close menu",
     opensWhatsapp: "(opens WhatsApp)",
     opensNewTab: "(opens in a new tab)",
     languageLabel: "Site language",
     footerLinksLabel: "Outubro links",
+    footerPagesLabel: "Pages",
   },
 
   whatsapp: {
@@ -32,12 +35,16 @@ export const en: Dictionary = {
 
   tagline: "Ready to unlock your language and your future?",
 
-  nav: [
-    { href: "#metodo", label: "Method" },
-    { href: "#idiomas", label: "Languages" },
-    { href: "#como-funciona", label: "How it works" },
-    { href: "#precos", label: "Pricing" },
-  ],
+  nav: {
+    home: "Home",
+    metodo: "Method",
+    precos: "Pricing",
+    depoimentos: "Testimonials",
+    faq: "FAQ",
+    contato: "Contact",
+    "trabalhe-conosco": "Careers",
+    "politica-de-privacidade": "Privacy policy",
+  },
 
   header: {
     cta: "Enroll",
@@ -179,6 +186,22 @@ export const en: Dictionary = {
     },
     note: "Not sure which to pick? Message us on WhatsApp and we'll help.",
     noteCta: "Ask on WhatsApp",
+    seeAll: "See all prices",
+  },
+
+  depoimentos: {
+    title: "Straight from those who got unstuck",
+    lead: "Outubro students, in their own words.",
+    placeholder: "example",
+    languages: { ingles: "English", frances: "French", espanhol: "Spanish", alemao: "German" },
+    seeAll: "See all testimonials",
+  },
+
+  faq: {
+    title: "Got questions?",
+    lead: "What people ask most before they start.",
+    categories: { aulas: "Classes", pagamento: "Payment", reposicao: "Absences and make-up classes", cancelamento: "Cancelling" },
+    seeAll: "See all questions",
   },
 
   ctaFinal: {
@@ -192,7 +215,6 @@ export const en: Dictionary = {
     links: {
       library: "Library: 200GB of free materials",
       blog: "Blog (in Portuguese)",
-      careers: "I want to teach",
       instagram: "Instagram",
     },
     copyright: "© {year} Outubro Idiomas. Quality and professionalism since 2018.",

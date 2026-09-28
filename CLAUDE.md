@@ -21,16 +21,18 @@ having the right content, §3 for the visual identity that already exists and mu
 (not replaced), §4 for the reference analysis (Babbly is the primary reference, client's
 favorite; speakPolish secondary), §5 for decisions made 2026-09-09, §6 for open questions.
 
-**Status (2026-09-27): specs approved; Home built and aligned to the client's brandbook, in PT/EN/ES.**
+**Status (2026-09-28): specs approved; every page built in PT/EN/ES on Payload-shaped stand-ins, CMS not yet plugged in.**
 `docs/architecture.md` (page structure, Payload scope, motion tier decision, SEO plan, stack) and
 `docs/visual-identity-spec.md` (brand metaphors, signature interaction, type/color/doodle-layer
 system — produced via the `awwwards-v8` skill's Invention Gate,
 `.agents/skills/masalale-awwwards-designer/`) were approved as presented in `/apresentacao`
-(`research.md` §5). The Home now ships 11 of the 13 sections (`TASK-home-static.md`, `TASK-brand-alignment.md`)
-in three locales — PT at `/`, EN at `/en`, ES at `/es` (only these three; the client dropped DE/FR).
-Testimonials and FAQ wait for Payload (`TASK-scaffold.md` → `TASK-home-cms.md`); pricing is
-rendered from `lib/pricing.ts`, a Payload-shaped stand-in that `TASK-home-cms.md` swaps for a
-query. **The client's brandbook (`docs/Outubro Idiomas_brandbook.pdf`) is the authority on
+(`research.md` §5). The Home ships all 13 sections and the seven supporting pages exist
+(`/precos`, `/metodo`, `/depoimentos`, `/faq`, `/contato`, `/trabalhe-conosco`,
+`/politica-de-privacidade`) in three locales with localized URLs (`/metodo` · `/en/method` ·
+`/es/metodo`; only PT/EN/ES, the client dropped DE/FR) — `TASK-pages-static.md`. Pricing, FAQ
+and testimonials render from `lib/pricing.ts`, `lib/faqs.ts`, `lib/testimonials.ts`:
+Payload-shaped stand-ins whose `get*` bodies `TASK-cms` swaps for Local API queries.
+Testimonials are openly-placeholder cards until the client adds real ones. **The client's brandbook (`docs/Outubro Idiomas_brandbook.pdf`) is the authority on
 palette (§2.6), typeface (§2.5: Source Sans only), logo use (§2.1-2.4: official lockups, never
 re-typeset) and graphic elements (§2.11)** — it overrides the awwwards-v8 taste rules where they
 conflict (pure `#000` is the brand's black). **Content selection (final copy, which
@@ -71,7 +73,7 @@ instead).
 | Media | **Vercel Blob** (`@payloadcms/storage-vercel-blob`) — **not yet installed** | per the client's explicit instruction — this is the concrete reason Payload is in the stack at all right now |
 | Type | **Source Sans 3** (variable, `latin` + `latin-ext`) via `next/font/google` | brandbook §2.5. OG images use the vendored `assets/fonts/SourceSans3-Black.ttf` (OFL) |
 | i18n | Next 16 built-in pattern: `app/[lang]` root layout + `next/root-params`, dictionaries in `content/home/{pt,en,es}.ts` | no library. PT unprefixed; localized slugs from the `routes` map in `content/i18n.ts`, turned into exact per-page rewrites/redirects by `lib/localized-routes.ts` (never a catch-all); no `proxy.ts` |
-| Styling | **Tailwind 4.3.3** + **shadcn 4.21.0** (`radix-nova` style, `radix-ui` 1.6.7, `cn` 0.3.0, `tw-animate-css` 1.4.0) · icons **lucide-react 1.45.0** | shadcn chosen because Magic UI's components assume it. Its semantic tokens (`--background`, `--primary`, …) are mapped onto the brand tokens in `app/globals.css` — light only, no `.dark` block. Its generated `button.tsx` was removed (uses `transition-all`, a Tier 1 anti-pattern); CTAs are `components/site/cta-link.tsx`. |
+| Styling | **Tailwind 4.3.3** + **shadcn 4.21.0** (`radix-nova` style, `radix-ui` 1.6.7, `cn` 0.3.0, `tw-animate-css` 1.4.0) · icons **lucide-react 1.45.0** | shadcn chosen because Magic UI's components assume it. Its semantic tokens (`--background`, `--primary`, …) are mapped onto the brand tokens in `app/globals.css` — light only, no `.dark` block. Its generated `button.tsx` uses `transition-all` (a Tier 1 anti-pattern): it stays vendored only because `sheet.tsx` imports it, and is never rendered (`showCloseButton={false}`); CTAs are `components/site/cta-link.tsx`. Vendored `accordion.tsx`/`sheet.tsx` are restyled via `className` (`cn` merges, so `transition-colors` overrides `transition-all`), never edited. |
 | Animation | **GSAP 3.15.0** + **Lenis 1.3.26** (**Tier 2**, `awwwards-v8` skill) + selected **React Bits** / **Magic UI** components (Magic UI `Marquee` installed via `shadcn add @magicui/marquee`; React Bits not yet used) | Tier 3 (WebGL) deliberately rejected — see `docs/architecture.md` §4. Use React Bits (reactbits.dev) and Magic UI (magicui.design) *where they fit*, not wholesale — verify exact component names/props against their live docs before use, never invent one (see §5 below). |
 | Forms | Two hand-built typed forms (contact/lead, careers) — not yet built | persisted + emailed, never email-only |
 | Email | `[VERIFY: no transactional provider chosen yet]` | |

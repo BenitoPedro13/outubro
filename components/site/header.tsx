@@ -1,35 +1,36 @@
-import { getDictionary } from "@/content/dictionaries";
+import Link from "next/link";
+import { getDictionary, getLocale } from "@/content/dictionaries";
+import { localePath, type RouteKey } from "@/content/i18n";
 import { CtaLink } from "./cta-link";
 import { Logo } from "./logo";
 import { ScrollCord } from "./cord";
 import { LanguageSwitcher } from "./language-switcher";
+import { NavLinks } from "./nav-links";
+import { MobileNav } from "./mobile-nav";
 
-// Sticky, server-rendered. Below 1024px it's logo + CTA (+ language links from 640px):
-// on a one-page narrative a phone visitor scrolls, and the CTA is the one thing that must
-// never leave reach (a menu toggle would be one more widget to get right for no gain).
+/** Pages in the header, in order. Careers and privacy live in the footer. */
+const headerRoutes: RouteKey[] = ["metodo", "precos", "depoimentos", "faq", "contato"];
+
+// Sticky, server-rendered. From 1024px: logo, page links, language, CTA. Below it: logo, CTA
+// and a menu button (mobile-nav.tsx); the CTA never leaves reach.
 // Height is --header-h in globals.css — keep h-16/lg:h-20 + border-b-2 in sync with it.
 export async function Header() {
-  const t = await getDictionary();
+  const [t, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const items = headerRoutes.map((route) => ({ route, href: localePath(locale, route), label: t.nav[route] }));
+
   return (
     <header className="sticky top-0 z-50 border-b-2 border-[var(--color-ink)] bg-[var(--color-bg)]">
       <div className="site-container flex h-16 items-center justify-between gap-3 lg:h-20">
-        <a href="#inicio" aria-label={t.ui.homeLabel} className="shrink-0">
+        <Link href={localePath(locale, "home")} aria-label={t.ui.homeLabel} className="shrink-0">
           <Logo alt="" priority className="h-7 w-auto sm:h-8 lg:h-9" />
-        </a>
+        </Link>
 
         <nav aria-label={t.ui.navLabel} className="hidden lg:block">
-          <ul className="flex items-center gap-1">
-            {t.nav.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className="rounded-full px-3.5 py-2 text-base font-bold transition-colors duration-150 hover:bg-[var(--color-lime)] xl:px-4"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <NavLinks
+            items={items}
+            className="flex items-center gap-1"
+            linkClassName="rounded-full px-3.5 py-2 text-base font-bold transition-colors duration-150 hover:bg-[var(--color-lime)] aria-[current=page]:bg-[var(--color-ink)] aria-[current=page]:text-[var(--color-bg-alt)] xl:px-4"
+          />
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -38,6 +39,11 @@ export async function Header() {
             {t.header.cta}
             <span className="hidden sm:inline">{t.header.ctaSuffix}</span>
           </CtaLink>
+          <MobileNav
+            items={[{ route: "home" as const, href: localePath(locale, "home"), label: t.nav.home }, ...items]}
+            locale={locale}
+            labels={{ menu: t.ui.menu, closeMenu: t.ui.closeMenu, navLabel: t.ui.navLabel, languageLabel: t.ui.languageLabel }}
+          />
         </div>
       </div>
       <ScrollCord />

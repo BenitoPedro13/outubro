@@ -8,9 +8,9 @@ content yourself for now, we can change it later"**. Each step below becomes its
 
 | Area | State |
 |---|---|
-| Home (`/`, `/en`, `/es`) | 11 of 13 sections live on `outubroidiomas.vercel.app` (noindex). Missing: Depoimentos, FAQ |
-| Supporting pages (`architecture.md` §1) | none built: `/precos`, `/metodo`, `/depoimentos`, `/faq`, `/trabalhe-conosco`, `/contato`, `/politica-de-privacidade` |
-| CMS (Payload + Postgres + Blob) | not installed. Pricing lives in `lib/pricing.ts` as a Payload-shaped stand-in |
+| Home (`/`, `/en`, `/es`) | all 13 sections (2026-09-28, `TASK-pages-static.md`); Depoimentos/FAQ on stand-ins |
+| Supporting pages (`architecture.md` §1) | all seven built in PT/EN/ES with localized URLs (2026-09-28); careers form still `TASK-careers-form`, privacy policy a draft pending legal review |
+| CMS (Payload + Postgres + Blob) | not installed. Pricing, FAQ, testimonials in `lib/{pricing,faqs,testimonials}.ts` as Payload-shaped stand-ins |
 | Forms, email, analytics, domain | none |
 
 **Compatibility checked 2026-09-27:** `@payloadcms/next` 3.90.2 peer range includes
@@ -84,7 +84,7 @@ follows is what it still covers:
   in `lib/` (no client fetching → no TanStack Query needed yet; it comes in if a client
   component ever needs server data).
 
-### 3. `TASK-pages-static`: every page, built first
+### 3. `TASK-pages-static`: every page, built first — **done 2026-09-28**
 Scope widened 2026-09-28: all pages, including the CMS-bound ones on stand-ins, plus the
 `/admin`-safe routing (explicit per-page rewrites from a slug map, never a catch-all) and a
 throwaway Payload spike that proves `/admin` and the localized pages coexist (**passed
@@ -105,8 +105,8 @@ throwaway Payload spike that proves `/admin` and the localized pages coexist (**
   anchors (`#metodo`…) and phones get no nav at all. Once real pages exist, the header links to
   them (anchors only on the Home), the footer gets a sitemap column, and phones get a menu built
   on a vetted accessible primitive (shadcn Sheet / Radix Dialog), not a hand-rolled toggle.
-- **Icons** (gap): `app/icon.png` is the 1080px, 38 KB symbol PNG. Replace it with an `icon.svg`
-  from the traced symbol, plus an `apple-icon.png` and a web manifest.
+- **Icons** — **done 2026-09-28**: `app/icon.svg` (the traced symbol, 4.8 KB) replaces the 38 KB
+  `app/icon.png`; `app/apple-icon.tsx` (generated PNG, lime on cobalt) and `app/manifest.ts`.
 
 ### 4. ~~`TASK-pages-cms`~~: folded into steps 2 and 3 (2026-09-28)
 - `/precos`: the full 2026 table and the 2027 comparison + "entenda o reajuste" copy (drafted).

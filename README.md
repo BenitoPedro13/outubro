@@ -1,11 +1,12 @@
 # Outubro Idiomas — website rebuild
 
-**Status (2026-09-27):** Home is live in code in three languages (PT at `/`, EN at `/en`, ES at
-`/es`) with 11 sections, now aligned to the client's brandbook (`docs/Outubro Idiomas_brandbook.pdf`):
-exact palette, Source Sans 3, the official logo (traced to SVG) and a pricing section —
-`docs/tasks/TASK-brand-alignment.md`. Testimonials and FAQ wait for Payload
-(`docs/tasks/TASK-scaffold.md`, not yet executed); pricing sits in `lib/pricing.ts` until then.
-Copy marked `[CONTENT]` in `content/home/*.ts` is draft wording pending
+**Status (2026-09-28):** every page is built in three languages (PT unprefixed, EN under `/en`, ES
+under `/es`, localized slugs): the full Home plus Preços, Método, Depoimentos, FAQ, Contato,
+Trabalhe conosco and a draft Política de privacidade (`docs/tasks/TASK-pages-static.md`), aligned
+to the client's brandbook. Pricing, FAQ and testimonials read Payload-shaped stand-ins in `lib/`
+until Payload is installed (`docs/tasks/TASK-scaffold.md`, then `TASK-cms`); testimonials are
+openly-placeholder cards. Copy marked `[CONTENT]` in `content/home/*.ts`, `content/pages/**` and
+`lib/faqs.ts` is draft wording pending
 `docs/client-content-request.md` (EN/ES are unreviewed translations). The approved planning
 document stays at `/apresentacao` (noindex).
 

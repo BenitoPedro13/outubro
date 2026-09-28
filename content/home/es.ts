@@ -16,12 +16,15 @@ export const es: Dictionary = {
 
   ui: {
     skipLink: "Saltar al contenido",
-    homeLabel: "Outubro Idiomas, volver al inicio",
-    navLabel: "Secciones",
+    homeLabel: "Outubro Idiomas, página de inicio",
+    navLabel: "Principal",
+    menu: "Menú",
+    closeMenu: "Cerrar menú",
     opensWhatsapp: "(abre WhatsApp)",
     opensNewTab: "(abre en una pestaña nueva)",
     languageLabel: "Idioma del sitio",
     footerLinksLabel: "Enlaces de Outubro",
+    footerPagesLabel: "Páginas",
   },
 
   whatsapp: {
@@ -32,12 +35,16 @@ export const es: Dictionary = {
 
   tagline: "¿Vamos a destrabar tu lengua y tu futuro?",
 
-  nav: [
-    { href: "#metodo", label: "Método" },
-    { href: "#idiomas", label: "Idiomas" },
-    { href: "#como-funciona", label: "Cómo funciona" },
-    { href: "#precos", label: "Precios" },
-  ],
+  nav: {
+    home: "Inicio",
+    metodo: "Método",
+    precos: "Precios",
+    depoimentos: "Testimonios",
+    faq: "Preguntas",
+    contato: "Contacto",
+    "trabalhe-conosco": "Trabaja con nosotros",
+    "politica-de-privacidade": "Política de privacidad",
+  },
 
   header: {
     cta: "Inscríbete",
@@ -179,6 +186,22 @@ export const es: Dictionary = {
     },
     note: "¿No sabes cuál elegir? Escríbenos por WhatsApp y te ayudamos.",
     noteCta: "Preguntar por WhatsApp",
+    seeAll: "Ver todos los precios",
+  },
+
+  depoimentos: {
+    title: "Quien se destrabó, lo cuenta",
+    lead: "Alumnos de Outubro, con sus propias palabras.",
+    placeholder: "ejemplo",
+    languages: { ingles: "Inglés", frances: "Francés", espanhol: "Español", alemao: "Alemán" },
+    seeAll: "Ver todos los testimonios",
+  },
+
+  faq: {
+    title: "¿Te quedó alguna duda?",
+    lead: "Lo que más nos preguntan antes de empezar.",
+    categories: { aulas: "Clases", pagamento: "Pago", reposicao: "Faltas y reposición", cancelamento: "Cancelación" },
+    seeAll: "Ver todas las preguntas",
   },
 
   ctaFinal: {
@@ -192,7 +215,6 @@ export const es: Dictionary = {
     links: {
       library: "Biblioteca: 200GB de materiales gratuitos",
       blog: "Blog (en portugués)",
-      careers: "Quiero dar clases",
       instagram: "Instagram",
     },
     copyright: "© {year} Outubro Idiomas. Calidad y profesionalismo desde 2018.",
