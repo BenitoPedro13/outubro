@@ -179,6 +179,8 @@ default and most damaging to this brand specifically):
   home FAQ section, `Course`-adjacent schema for the languages block `[VERIFY: whether schema.org
   Course is the right type for a language-school offering vs. Service — check current
   schema.org guidance before implementing]`.
+- **Pre-launch noindex**: every deploy is `noindex` until `SITE_INDEXABLE=true` is set in
+  Vercel (`lib/indexing.ts`, `TASK-brand-alignment.md` §8). Flip it at launch.
 - **Sitemap + robots**: generated (`app/sitemap.ts`, `app/robots.ts`), every route in §1 included
   except any that stay external per research.md §6 Q2.
 - **Static-first**: every route in §1 is SSG (`generateStaticParams`/default static rendering) —

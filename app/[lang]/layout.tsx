@@ -7,6 +7,7 @@ import { getDictionary, getLocale } from "@/content/dictionaries";
 import { langTag, locales } from "@/content/i18n";
 import { site, whatsappHref } from "@/content/site";
 import { sourceSans } from "@/lib/fonts";
+import { indexable } from "@/lib/indexing";
 import { siteUrl } from "@/lib/site-url";
 import "../globals.css";
 
@@ -23,6 +24,8 @@ export const metadata: Metadata = {
   // Absolute base so per-route OG images and canonicals resolve (lib/site-url.ts).
   metadataBase: new URL(siteUrl),
   title: site.name,
+  // Draft-content guard (lib/indexing.ts). Pages don't set `robots`, so this applies to all.
+  ...(indexable ? {} : { robots: { index: false, follow: false } }),
 };
 
 export default async function SiteLayout({ children }: LayoutProps<"/[lang]">) {

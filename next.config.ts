@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { indexable } from "./lib/indexing";
 
 const nextConfig: NextConfig = {
   // i18n (docs/tasks/TASK-brand-alignment.md §2.7): PT is served unprefixed. `/` renders
@@ -7,6 +8,11 @@ const nextConfig: NextConfig = {
   // Accept-Language redirect (the switcher is explicit).
   async rewrites() {
     return [{ source: "/", destination: "/pt" }];
+  },
+  // Belt-and-braces with the <meta name="robots"> in app/[lang]/layout.tsx: the header also
+  // covers non-HTML responses (OG images, sitemap). Dropped once SITE_INDEXABLE=true.
+  async headers() {
+    return indexable ? [] : [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
   },
   async redirects() {
     return [

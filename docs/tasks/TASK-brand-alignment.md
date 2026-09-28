@@ -251,3 +251,16 @@ Alternatives rejected:
 - **Como funciona cut corner**: a `clip-path` "folded note" corner that sliced the border and
   shadow with no fold drawn, so it read as a glitch. It isn't in the brandbook either. Removed;
   the cards now have a full border and shadow.
+
+## 8. Pre-launch noindex switch (2026-09-27, user: "add no index and push")
+
+The site deploys publicly to `outubroidiomas.vercel.app` for client review while content is
+still draft, so indexing is **off unless `SITE_INDEXABLE=true`** (`lib/indexing.ts`, read at
+build time):
+- `app/[lang]/layout.tsx` → `<meta name="robots" content="noindex, nofollow">` on every page.
+- `next.config.ts` → `X-Robots-Tag: noindex, nofollow` on every response (covers OG images).
+- `app/robots.ts` keeps crawling **allowed**, because a crawler must fetch a page to see its
+  noindex. The sitemap line is only advertised when indexable.
+- Verified against `next start`: default → header + meta on `/`, `/en`, OG image, no sitemap in
+  robots.txt. `SITE_INDEXABLE=true` → neither, and the sitemap is listed.
+- **Launch step**: set `SITE_INDEXABLE=true` in the Vercel project (Production) and redeploy.

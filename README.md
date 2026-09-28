@@ -21,5 +21,8 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+**Launch checklist item:** deploys are `noindex` until `SITE_INDEXABLE=true` is set in the
+Vercel project env (`lib/indexing.ts`); set it only when content is final, then redeploy.
+
 Payload admin, database, and Blob storage are not wired up yet (`TASK-scaffold.md`) — this
 currently runs the Next.js app only.
