@@ -1,10 +1,11 @@
 import { Check } from "lucide-react";
-import { metodo } from "@/content/home";
+import { getDictionary } from "@/content/dictionaries";
 import { SectionHeading } from "@/components/site/section-heading";
 
 // Home → "Só tem na Outubro" (architecture.md §1.1.4). The four points are chat
 // bubbles — the communicative approach literally shown as conversation.
-export function Metodo() {
+export async function Metodo() {
+  const { metodo } = await getDictionary();
   return (
     <section id="metodo" aria-labelledby="metodo-title" className="border-b-2 border-[var(--color-ink)] bg-[var(--color-pink)]">
       <div className="site-container grid gap-10 py-20 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-28">

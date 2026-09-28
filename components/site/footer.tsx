@@ -1,44 +1,65 @@
 import { ArrowUpRight } from "lucide-react";
-import { footer, site } from "@/content/home";
+import { fill, getDictionary } from "@/content/dictionaries";
+import { site } from "@/content/site";
 import { Logo } from "./logo";
 import { CtaLink } from "./cta-link";
+import { LanguageSwitcher } from "./language-switcher";
 
-export function Footer() {
+// The vertical lockup is brandbook §2.1's preferred version; here it's the footer's anchor,
+// big, in §2.3's on-black colourway.
+export async function Footer() {
+  const t = await getDictionary();
+  const links = [
+    { href: site.library, label: t.footer.links.library },
+    { href: site.blog, label: t.footer.links.blog },
+    { href: site.careers, label: t.footer.links.careers },
+    { href: site.instagram, label: t.footer.links.instagram },
+  ];
+
   return (
     <footer className="bg-[var(--color-ink)] text-[var(--color-bg)]">
-      <div className="site-container grid gap-10 py-14 md:grid-cols-[1.2fr_1fr] md:py-20">
-        <div>
-          <Logo tone="verde" inverted />
-          <p className="mt-5 max-w-[36ch] text-[var(--color-border)]">{footer.about}</p>
-          <p className="mt-6 text-xl font-extrabold text-[var(--color-lime)]">{site.tagline}</p>
-          <div className="mt-6">
-            <CtaLink variant="on-dark">Falar no WhatsApp</CtaLink>
-          </div>
-        </div>
+      <div className="site-container grid gap-12 py-16 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16 md:py-24">
+        <Logo variant="vertical" inverse className="h-auto w-full max-w-[280px] md:max-w-[360px]" />
 
-        <nav aria-label="Links da Outubro">
-          <ul className="grid gap-1">
-            {footer.links.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener"
-                  className="group inline-flex min-h-11 items-center gap-2 py-2 font-bold transition-colors duration-150 hover:text-[var(--color-lime)]"
-                >
-                  {link.label}
-                  <ArrowUpRight aria-hidden="true" strokeWidth={2} className="size-4 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                  <span className="sr-only"> (abre em nova aba)</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div className="grid gap-12 sm:grid-cols-2 sm:gap-10">
+          <div>
+            <p className="max-w-[34ch] text-lg text-[var(--color-border)]">{t.footer.about}</p>
+            <p className="mt-6 text-2xl font-black leading-tight text-[var(--color-lime)]">{t.tagline}</p>
+            <div className="mt-8">
+              <CtaLink variant="on-dark">{t.footer.cta}</CtaLink>
+            </div>
+          </div>
+
+          <nav aria-label={t.ui.footerLinksLabel}>
+            <ul className="grid gap-1">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener"
+                    className="group inline-block py-2.5 text-lg font-bold leading-snug transition-colors duration-150 hover:text-[var(--color-lime)]"
+                  >
+                    {/* The arrow stays glued to the last word so it never wraps alone. */}
+                    {link.label.split(" ").slice(0, -1).join(" ")}{" "}
+                    <span className="whitespace-nowrap">
+                      {link.label.split(" ").at(-1)}
+                      <ArrowUpRight aria-hidden="true" strokeWidth={2} className="ml-1.5 inline size-4 align-[-0.1em] transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </span>
+                    <span className="sr-only"> {t.ui.opensNewTab}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
       </div>
+
       <div className="border-t border-[var(--color-ink-soft)]">
-        <p className="site-container py-6 text-sm text-[var(--color-border)]">
-          © {new Date().getFullYear()} {site.name}. Escola de idiomas online desde 2018.
-        </p>
+        <div className="site-container flex flex-col items-center gap-3 py-6 text-center">
+          <LanguageSwitcher label={t.ui.languageLabel} tone="dark" />
+          <p className="text-sm text-[var(--color-border)]">{fill(t.footer.copyright, { year: new Date().getFullYear() })}</p>
+        </div>
       </div>
     </footer>
   );

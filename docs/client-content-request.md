@@ -10,8 +10,9 @@ confirmação.
 
 1. **Depoimentos.** Quais alunos entram, com nome, idioma estudado e o texto. Pode ter foto ou vídeo?
    Temos autorização de cada pessoa para publicar?
-2. **Preços.** Confirmar a tabela 2026 do site atual (individual R$520 / 935 / 1.400; dupla
-   R$350 / 650 / 950). Mostramos também a de 2027? E o texto do "Clique aqui e entenda o reajuste"?
+2. **Preços.** A Home já mostra a tabela 2026 do site atual (individual R$520 / 935 / 1.400;
+   dupla R$350 / 650 / 950, por aluno/mês). Confirmar os valores. Quando trocamos para a de 2027
+   (R$570 / 1.000 / 1.520; dupla R$375 / 650 / 950)? E o texto do "Clique aqui e entenda o reajuste"?
 3. **FAQ.** Quais perguntas e respostas. O site atual não tem uma lista.
 4. **"Como funciona" em 3 passos.** Não existe no site atual. Sugestão: *teste de nível → plano de
    aulas → conversação desde a primeira aula*. Está certo? Querem outras palavras?
@@ -22,8 +23,11 @@ confirmação.
 
 ## Arquivos
 
-7. **Logo em vetor** (SVG, AI ou PDF), nas versões azul e verde. Hoje só temos PNG.
-8. **A fonte usada no Instagram**: é uma fonte comprada/licenciada? Qual o nome?
+7. **Logo em vetor** (SVG, AI ou PDF). Por enquanto vetorizamos os PNGs oficiais
+   (`public/brand/*.svg`, fiéis ao original); o arquivo vetorial de vocês substitui esses.
+8. ~~A fonte usada no Instagram~~ — respondido pelo brandbook: Source Sans (27/09/2026).
+15. **Ilustrações do brandbook** (§2.2: capivara, papagaio, cadeiras, bar…): podemos receber os
+    arquivos (SVG ou PNG em alta)? Hoje o site usa só o mascote e o símbolo.
 9. **Fotos dos professores**: querem rostos no site (página Método)? Se sim, quais pessoas autorizam?
 
 ## Decisões
@@ -32,5 +36,9 @@ confirmação.
     (Trazer para dentro ajuda o Google a valorizar o domínio novo.)
 11. **Formulário de contato**: querem um no site, ou o WhatsApp é o único caminho de matrícula?
 12. **Vagas para professores**: quais campos o formulário de candidatura precisa ter?
-13. **Site em inglês**: o link "WEBSITE IN ENGLISH" continua existindo? Entra no site novo?
+13. **Site em inglês e espanhol**: o site novo já tem `/en` e `/es` (traduções nossas, tom
+    informal da marca). Precisamos de (a) revisão por falante nativo e (b) saber quem é esse
+    público: o site vende para trabalhadores brasileiros — o visitante EN/ES é estrangeiro
+    aprendendo português, brasileiro no exterior, ou outro? Isso muda o texto. O link antigo
+    "WEBSITE IN ENGLISH" pode apontar para `/en`.
 14. **Domínio**: o site novo substitui o `outubroidiomas.com`?

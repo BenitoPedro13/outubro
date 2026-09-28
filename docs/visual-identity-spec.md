@@ -78,82 +78,63 @@ file path, not an oversight]`).
 
 ## 3. Typography
 
-**Anti-pattern check first** (`anti-patterns.md` #1): Poppins, Nunito, Lato, Raleway, Inter,
-Montserrat are all forbidden as headline faces — and the current Instagram content's bold
-condensed sans (research.md §3) risks landing exactly in that generic-geometric-sans family if
-approximated carelessly.
+**Superseded 2026-09-27 by the client's brandbook** (`docs/Outubro Idiomas_brandbook.pdf` §2.5,
+`TASK-brand-alignment.md` §2.2): **Source Sans 3 is the only family** ("somente as fontes dessa
+família devem ser utilizadas"). The earlier Manrope pick (Babbly's face) is retired everywhere,
+`/apresentacao` included.
 
-**Pick**: **Manrope** for headlines (weights 700-800) — chosen deliberately because it's
-Babbly's own type choice (research.md §4a type specimen slide) and reads as a considered,
-slightly warmer alternative to the fully-generic names above, while still being widely available
-and variable-capable. Paired with **Manrope** at regular/medium weight for body text as well
-(one family, two weight ranges — simpler than a serif/sans pairing, and consistent with the
-brand's existing single-typeface Instagram usage). `[VERIFY: license/self-hosting terms for
-Manrope — it's Google Fonts-licensed (OFL) so self-hosting per invariant 5-equivalent (no
-third-party font requests) is straightforward, but confirm the variable-font file before
-committing]`.
-
-**Scale**: the skill's golden-ratio `clamp()` scale (`aesthetic-foundations.md`), applied as-is
-— `--font-hero` through `--font-micro`. Descender clearance: **`0.31em`** — measured 2026-09-13 with the
-canvas technique in `references/descender-safety.md` (Manrope "gyjpq" at 100px descends 25.5px
-at both 400 and 800 weight; +20% buffer), replacing the original `0.14em` estimate — and apply the full Descender Safety Protocol
-to every display-text element (>48px) — `overflow: visible`, never `clip`.
+- Loaded as the variable font through `next/font/google` (`lib/fonts.ts`), subsets `latin` +
+  `latin-ext` (the latter carries the hero's IPA glyphs ĩ ɡ ɐ). Weights in use: **900** display
+  (`.type-hero/.type-display/.type-heading`, matches the logo's heavy wordmark), **700**
+  subheads/CTAs, **600** emphasis, **400** body.
+- The brandbook's "uso restrito" Verdana is for email/system contexts only, never the site.
+- **Descender clearance: `0.27em`**, measured 2026-09-27 with the canvas technique: "gyjpq" at
+  100px descends 22.4px (400) / 21.1px (700) / 20.6px (900); worst case +20%. The full Descender
+  Safety Protocol still applies to every display element >48px.
+- Scale: unchanged golden-ratio `clamp()` tokens, with `--font-hero` capped at 5rem so the hero's
+  first line ("Bora destravar sua") holds at 1440px.
+- **The logo is never set in Source Sans** (brandbook §2.4 "não reproduza em outra
+  tipografia"): the lockups are the official artwork, traced to SVG (`public/brand/`).
 
 ## 4. Color
 
-**Anti-pattern check**: no default Tailwind blue, no pure `#000`/`#FFF` (`anti-patterns.md`
-#2-3). The existing brand palette (research.md §3) is high-saturation by design — that's a
-point of difference from Babbly's softer pastel take, not something to correct.
+**Superseded 2026-09-27 by the brandbook's palette** (§2.6, confirmed by the user with the coolors
+link `cfea27-3b6dd8-ff97d2-f96a5a-000000-e7e7e9-fef2e9`). Tokens in `app/globals.css`:
 
-Proposed tokens (author these as CSS custom properties in the global stylesheet, per invariant
-7 — no raw hex outside the token file):
+| Token | Hex | Brandbook name |
+|---|---|---|
+| `--color-lime` | `#CFEA27` | Verde limão |
+| `--color-lime-deep` | `#C0D921` | Verde limão contraste |
+| `--color-cobalt` | `#3B6DD8` | Azul |
+| `--color-pink` | `#FF97D2` | Rosa |
+| `--color-coral` | `#F96A5A` | Vermelho / Vibrant Coral |
+| `--color-ink` | `#000000` | Preto |
+| `--color-bg` | `#FEF2E9` | Nude / Seashell |
+| `--color-border` | `#E7E7E9` | Alabaster Grey |
+| `--color-bg-alt` | `#FFF9F4` | *derived* tint of Seashell (card "paper") |
+| `--color-ink-soft` | `#4D4845` | *derived* warm neutral (secondary text) |
 
-```css
-:root {
-  /* Off-white base, not pure #FFF */
-  --color-bg: #FAF9F5;
-  --color-bg-alt: #FFFDF7;         /* sticky-note/card background */
-
-  /* Off-black, not pure #000 */
-  --color-ink: #14120F;
-
-  /* Brand hues — authored shades, not swatch-picker defaults */
-  --color-lime: #C8E639;           /* primary accent, from current mark */
-  --color-lime-deep: #9BB821;      /* hover/active state */
-  --color-cobalt: #2E5FE0;         /* secondary mark color, links */
-  --color-cobalt-deep: #1F44AD;
-  --color-pink: #F0389C;           /* doodle/highlight accent */
-  --color-coral: #FF5D3E;          /* underline-scribble accent, from IG content */
-
-  /* Neutrals for text hierarchy */
-  --color-ink-soft: #4A4740;
-  --color-border: #E7E3D8;
-}
-```
-
-**Resolved 2026-09-13** (`TASK-home-static.md` §2.0): pixel-sampled from the logo PNGs, which
-are flat single-colour fills — `logo verde 1.png` = **`#CFEA27`**, `logo azul 1.png` =
-**`#3B6DD8`** (identical to the live site's own `--lime`/`--blue`). `--color-lime` and
-`--color-cobalt` now use those exact values; pink, coral, ink and neutrals stay as approved
-(the live site's pink is a light `#FF97D2`, but the client approved the hot pink as presented).
+Pure `#000` is a deliberate exception to awwwards-v8 anti-pattern #3: it is the brand's own black
+and the official logo files are drawn in it. `#FFF` stays out (the brandbook has no white).
 
 WCAG contrast, measured (use only passing pairs for text):
 
 | Text on ground | Ratio | Use |
 |---|---|---|
-| ink on bg | 17.75 | any |
-| ink-soft on bg / bg-alt | 8.79 / 9.11 | any |
-| ink on lime | 13.76 | any |
-| ink-soft on lime | 6.82 | any |
-| ink on pink | 5.12 | any |
-| ink on coral | 6.13 | any |
-| bg-alt on cobalt | 4.73 | any (just) |
-| cobalt on bg | 4.57 | any (just) |
-| bg-alt on pink | 3.59 | ≥24px / ≥18.66px bold only |
-| bg-alt on coral | 3.00 | ≥24px / ≥18.66px bold only |
-| pink on bg | 3.47 | large text / decoration only |
-| coral on bg | 2.89 | decoration only, never text |
-| ink-soft on pink | ~2.8 | never |
+| ink on bg / bg-alt | 19.09 / 20.11 | any |
+| ink-soft on bg / bg-alt | 8.20 / 8.64 | any |
+| ink on lime | 15.45 | any |
+| ink on pink | 10.61 | any |
+| ink on coral | 7.24 | any |
+| bg-alt (paper) on cobalt | 4.61 | any — **the only light that passes on cobalt** |
+| bg on cobalt / ink on cobalt | 4.37 / 4.36 | ≥24px or ≥18.66px bold only |
+| cobalt on bg | 4.37 | large text / decoration only |
+| lime / bg on ink | 15.45 / 19.09 | any |
+| pink on bg | 1.80 | **never text** — fill only |
+| coral on bg | 2.64 | **never text** — fill only |
+
+Brandbook §2.3 colourways for the logo: blue mark + black word (default, `logo-*.svg`); lime mark
++ Seashell word on black (`logo-*-inverse.svg`); lime mark + black word on blue (OG images).
 
 ## 5. The doodle/sticker layer (Babbly pattern, adapted)
 
@@ -203,7 +184,11 @@ TIER: 2 (GSAP + Lenis + SplitType-class) — Tier 3 WebGL explicitly rejected, a
 
 ## 9. Open items before build starts
 
-- ~~Exact hex sampling from source logo files (§4).~~ Done 2026-09-13.
+- ~~Exact hex sampling from source logo files (§4).~~ Done 2026-09-13; superseded by the
+  brandbook palette 2026-09-27.
+- The brand symbol (brandbook §2.1) replaces the generic StarBurst polygon as the site's
+  sticker/bullet (`components/site/brand-symbol.tsx`, CSS mask over `public/brand/symbol.svg`).
+  Brandbook §2.2 illustrations are wanted but no files were delivered yet.
 - Final micro-copy wording (§5) — content selection, deferred.
-- Manrope variable-font self-hosting confirmation (§3).
-- ~~Descender clearance measured against the actual Manrope files, not estimated (§3).~~ Done 2026-09-13 (0.31em).
+- ~~Manrope variable-font self-hosting confirmation (§3).~~ Moot — Source Sans 3 per the brandbook (2026-09-27).
+- ~~Descender clearance measured against the actual font files (§3).~~ Re-measured for Source Sans 3 2026-09-27 (0.27em).

@@ -1,19 +1,14 @@
 import { BookOpen, FileCheck, GraduationCap, HeartHandshake, MessagesSquare, Smile, type LucideIcon } from "lucide-react";
-import { diferenciais } from "@/content/home";
+import { getDictionary } from "@/content/dictionaries";
 import { CtaLink } from "@/components/site/cta-link";
 
-const icons: Record<(typeof diferenciais.items)[number]["icon"], LucideIcon> = {
-  contract: FileCheck,
-  training: GraduationCap,
-  conversation: MessagesSquare,
-  teachers: Smile,
-  material: BookOpen,
-  team: HeartHandshake,
-};
+// Icons in dictionary order: contract, training, conversation, teachers, material, team.
+const icons: LucideIcon[] = [FileCheck, GraduationCap, MessagesSquare, Smile, BookOpen, HeartHandshake];
 
 // Home → Differentiators (architecture.md §1.1.8) — the objection-handling block
 // (fees, contracts, textbooks), so it ends in a CTA instead of handing off to a footer.
-export function Diferenciais() {
+export async function Diferenciais() {
+  const { diferenciais } = await getDictionary();
   return (
     <section id="diferenciais" aria-labelledby="diferenciais-title" className="bg-[var(--color-ink)] text-[var(--color-bg)]">
       <div className="site-container py-20 lg:py-28">
@@ -22,8 +17,8 @@ export function Diferenciais() {
         </h2>
 
         <ul className="reveal-deck mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {diferenciais.items.map((item) => {
-            const Icon = icons[item.icon];
+          {diferenciais.items.map((item, i) => {
+            const Icon = icons[i];
             return (
               <li key={item.title} className="rounded-3xl bg-[var(--color-bg-alt)] p-6 text-[var(--color-ink)] sm:p-7">
                 <span aria-hidden="true" className="grid size-12 place-items-center rounded-full border-2 border-[var(--color-ink)] bg-[var(--color-lime)]">

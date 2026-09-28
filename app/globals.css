@@ -4,26 +4,32 @@
 
 /*
   Design tokens — docs/visual-identity-spec.md §3-4, §7.
-  Hero/display sizes are tuned down from the awwwards-v8 skill's literal golden-ratio
+  Type: Source Sans 3 (brandbook §2.5). Hero/display sizes are tuned down from the awwwards-v8 skill's literal golden-ratio
   values: that scale assumes short editorial headlines, ours is a full PT-BR sentence
   ("Bora destravar sua língua e seu futuro?") that needs to wrap cleanly at 375px.
 */
 :root {
-  /* Color — authored shades, no default Tailwind blue, no pure #000/#FFF */
-  --color-bg: #faf9f5;
-  --color-bg-alt: #fffdf7;
-  --color-ink: #14120f;
-  --color-ink-soft: #4a4740;
-  --color-border: #e7e3d8;
-  --color-lime: #cfea27; /* sampled from logo verde 1.png, 2026-09-13 */
-  --color-lime-deep: #9bb821;
-  --color-cobalt: #3b6dd8; /* sampled from logo azul 1.png, 2026-09-13 */
-  --color-cobalt-deep: #1f44ad;
-  --color-pink: #f0389c;
-  --color-coral: #ff5d3e;
+  /* Color — brandbook §2.6 (docs/Outubro Idiomas_brandbook.pdf), exact hexes.
+     Pure #000 is the brand's own black (brandbook + official logo files): a documented
+     deviation from awwwards-v8 anti-pattern #3. No #FFF — the brandbook has no white. */
+  --color-bg: #fef2e9; /* Nude / Seashell */
+  --color-bg-alt: #fff9f4; /* derived tint of Seashell — card "paper"; the only light that
+                              passes on cobalt (4.61) */
+  --color-ink: #000000; /* Preto */
+  --color-ink-soft: #4d4845; /* derived warm neutral — 8.20 on bg */
+  --color-border: #e7e7e9; /* Alabaster Grey */
+  --color-lime: #cfea27; /* Verde limão */
+  --color-lime-deep: #c0d921; /* "Verde limão contraste" */
+  --color-cobalt: #3b6dd8; /* Azul */
+  --color-pink: #ff97d2; /* Rosa — fill only, never text (1.80 on bg) */
+  --color-coral: #f96a5a; /* Vermelho — fill only, never text (2.64 on bg) */
+
+  /* Sticky header height — one source for anchor offsets (scroll-margin-top). Header is
+     h-16 / lg:h-20 plus its 2px bottom border. */
+  --header-h: 66px;
 
   /* Type scale — clamp(mobile, vw-relative, desktop) */
-  --font-hero: clamp(2.75rem, 6.5vw, 5.5rem);
+  --font-hero: clamp(2.75rem, 6vw, 5rem);
   --font-display: clamp(2.25rem, 4.5vw, 3.5rem);
   --font-heading: clamp(1.75rem, 3vw, 2.5rem);
   --font-subheading: clamp(1.375rem, 2vw, 1.75rem);
@@ -40,9 +46,9 @@
   --ls-caps: 0.06em;
 
   /* Descender Safety Protocol — awwwards-v8 skill, mandatory on display text >48px */
-  /* Measured 2026-09-13 (canvas technique, descender-safety.md): Manrope "gyjpq" at
-     100px descends 25.5px below baseline at both 400 and 800 → +20% buffer = 0.31em. */
-  --descender-clearance: 0.31em;
+  /* Measured 2026-09-27 (canvas technique, descender-safety.md): Source Sans 3 "gyjpq" at
+     100px descends 22.4px (400) / 21.1px (700) / 20.6px (900) → worst case +20% = 0.27em. */
+  --descender-clearance: 0.27em;
 
   /* Spacing (8px base) */
   --space-xs: 4px;
@@ -98,7 +104,7 @@
   --color-cobalt: var(--color-cobalt);
   --color-pink: var(--color-pink);
   --color-coral: var(--color-coral);
-  --font-sans: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-source-sans), "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -169,7 +175,7 @@ body {
 .type-hero,
 .type-display,
 .type-heading {
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: var(--ls-tight);
   padding-bottom: var(--descender-clearance);
   overflow: visible;
@@ -214,8 +220,8 @@ body {
    container. Line color is deliberately more visible than a "texture" at this scale. */
 .notebook-grid {
   background-image:
-    linear-gradient(rgba(20, 18, 15, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20, 18, 15, 0.09) 1px, transparent 1px);
+    linear-gradient(rgb(0 0 0 / 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(0 0 0 / 0.08) 1px, transparent 1px);
   background-size: 32px 32px;
   background-color: var(--color-bg-alt);
 }
@@ -309,15 +315,34 @@ body {
   }
 }
 
-/* Anchor targets clear the sticky header. */
+/* Anchor targets land flush under the sticky header. Lenis (smooth-scroll.tsx) adds no
+   offset of its own, so the header height is counted exactly once. */
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 82px;
+  }
+}
 [id] {
-  scroll-margin-top: 88px;
+  scroll-margin-top: var(--header-h);
 }
 
 /* Sticker shadow — hard offset, ink-tinted, the "cut-out and stuck on" look. */
 .sticker {
   border: 2px solid var(--color-ink);
   box-shadow: 4px 4px 0 0 var(--color-ink);
+}
+
+/* Brand symbol as a decorative sticker/bullet — brandbook §2.1 "Símbolo", traced from the
+   official file (public/brand/symbol.svg). A mask, so one file takes any colour token via
+   --symbol-color; size comes from the element's own width/height. */
+/* In a layer so utilities (hidden, sm:block, size-*) can override its display. */
+@layer components {
+  .brand-symbol {
+    display: inline-block;
+    flex-shrink: 0;
+    background-color: var(--symbol-color, var(--color-cobalt));
+    mask: url("/brand/symbol.svg") center / contain no-repeat;
+  }
 }
 
 /* Primary CTA — the one control every section funnels into. Transitions name their
@@ -333,8 +358,8 @@ body {
   background: var(--color-lime);
   padding: 12px 24px;
   color: var(--color-ink);
-  font-weight: 800;
-  font-size: 1.0625rem;
+  font-weight: 700;
+  font-size: 1.125rem;
   line-height: 1.2;
   text-align: center;
   box-shadow: 4px 4px 0 0 var(--color-ink);
@@ -389,7 +414,7 @@ body {
   background: var(--color-ink);
   padding: 10px 18px;
   color: var(--color-lime);
-  font-weight: 800;
+  font-weight: 700;
 }
 .skip-link:focus {
   top: 12px;
@@ -418,6 +443,21 @@ body {
   transform: rotate(-1.5deg);
   transform-origin: left center;
 }
+/* Phonetic margin note beside the highlighted word — brandbook §2.11 ("os fonemas
+   realçados formam a base sólida para dominar a pronúncia"). Source Sans, not a script
+   face (§2.5 allows one family). Cobalt on bg is 4.37: only used at ≥19px bold (large
+   text), and it's aria-hidden decoration. */
+.phonetic {
+  display: inline-block;
+  vertical-align: 0.55em;
+  font-size: max(1.1875rem, 0.3em);
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--color-cobalt);
+  white-space: nowrap;
+  transform: rotate(-5deg);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .cord-path {
     animation: cord-untangle 1.4s var(--ease-out) 0.25s both;

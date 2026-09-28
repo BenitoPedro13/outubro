@@ -1,18 +1,33 @@
-import Image from "next/image";
+// The official lockups — brandbook §2.1, traced from the client's own PNGs into
+// public/brand/*.svg (TASK-brand-alignment.md §2.3; provisional until the client's vector
+// files arrive, client-content-request.md item 7). Never re-set as live text: brandbook §2.4
+// "não reproduza em outra tipografia". Plain <img>: an SVG gains nothing from the image
+// optimizer, and the file is cached across pages.
 
-// The starburst mark ships as the client's own PNG (no vector supplied yet —
-// client-content-request.md item 7); the wordmark is live text so it stays crisp.
-export function Logo({ tone = "azul", inverted = false }: { tone?: "azul" | "verde"; inverted?: boolean }) {
+type LogoProps = {
+  variant?: "horizontal" | "vertical";
+  /** Lime mark + Seashell wordmark — brandbook §2.3's on-black colourway. */
+  inverse?: boolean;
+  className?: string;
+  /** Empty when a wrapping link already names the destination. */
+  alt?: string;
+  priority?: boolean;
+};
+
+const ratio = { horizontal: [1502, 287], vertical: [1701, 957] } as const;
+
+export function Logo({ variant = "horizontal", inverse = false, className, alt = "Outubro Idiomas", priority = false }: LogoProps) {
+  const [width, height] = ratio[variant];
   return (
-    <span className="inline-flex items-center gap-2.5">
-      <Image src={`/brand/logo-${tone}.png`} alt="" width={40} height={40} className="size-8 sm:size-9 lg:size-10" />
-      <span
-        className={`whitespace-nowrap text-[1.0625rem] font-extrabold leading-none tracking-tight sm:text-lg lg:text-xl ${
-          inverted ? "text-[var(--color-bg)]" : "text-[var(--color-ink)]"
-        }`}
-      >
-        outubro <span className="font-semibold">idiomas</span>
-      </span>
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element -- static SVG, see note above
+    <img
+      src={`/brand/logo-${variant}${inverse ? "-inverse" : ""}.svg`}
+      width={width}
+      height={height}
+      alt={alt}
+      className={className}
+      fetchPriority={priority ? "high" : undefined}
+      decoding="async"
+    />
   );
 }

@@ -2,13 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
-import { whatsappHref } from "@/content/home";
+
+type MobileCtaBarProps = {
+  label: string;
+  href: string;
+  opensWhatsapp: string;
+};
 
 // Phone-only sticky WhatsApp bar (hidden from 1024px). Appears once the hero's own CTA
 // has scrolled away and steps aside while the final CTA band is on screen, so there's
 // never two identical CTAs in view. Syncs with an external system (IntersectionObserver)
-// — a real Effect, with cleanup.
-export function MobileCtaBar() {
+// — a real Effect, with cleanup. Text comes from the server layout's dictionary.
+export function MobileCtaBar({ label, href, opensWhatsapp }: MobileCtaBarProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -37,15 +42,10 @@ export function MobileCtaBar() {
         visible ? "translate-y-0" : "translate-y-full"
       }`}
     >
-      <a
-        href={whatsappHref()}
-        target="_blank"
-        rel="noopener"
-        className="btn-cta w-full"
-      >
+      <a href={href} target="_blank" rel="noopener" className="btn-cta w-full">
         <MessageCircle aria-hidden="true" strokeWidth={2} className="size-5" />
-        <span>Falar no WhatsApp</span>
-        <span className="sr-only"> (abre o WhatsApp)</span>
+        <span>{label}</span>
+        <span className="sr-only"> {opensWhatsapp}</span>
       </a>
     </div>
   );

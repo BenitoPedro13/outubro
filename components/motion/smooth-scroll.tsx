@@ -16,8 +16,10 @@ export function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // Anchor offset matches the sticky header height (globals.css scroll-margin-top).
-    const lenis = new Lenis({ autoRaf: true, anchors: { offset: -88 } });
+    // No offset here: Lenis already honours the target's scroll-margin-top, which is
+    // the header height (globals.css --header-h). Adding one too counted the header twice
+    // and left a strip of the previous section showing (TASK-brand-alignment.md §2.4).
+    const lenis = new Lenis({ autoRaf: true, anchors: true });
     return () => lenis.destroy();
   }, []);
 

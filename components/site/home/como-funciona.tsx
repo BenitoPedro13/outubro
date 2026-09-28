@@ -1,5 +1,5 @@
 import { Paperclip } from "lucide-react";
-import { comoFunciona } from "@/content/home";
+import { getDictionary } from "@/content/dictionaries";
 import { SectionHeading } from "@/components/site/section-heading";
 import { CtaLink } from "@/components/site/cta-link";
 
@@ -11,7 +11,8 @@ const notes = [
 
 // Home → Como funciona (architecture.md §1.1.6). Babbly's numbered sticky notes with a
 // paperclip (research.md §4a), on the notebook grid (visual-identity-spec.md §5).
-export function ComoFunciona() {
+export async function ComoFunciona() {
+  const { comoFunciona } = await getDictionary();
   return (
     <section id="como-funciona" aria-labelledby="como-funciona-title" className="notebook-grid border-b-2 border-[var(--color-ink)]">
       <div className="site-container py-20 lg:py-28">
@@ -24,7 +25,7 @@ export function ComoFunciona() {
               className={`sticker relative rounded-md p-7 pt-10 [clip-path:polygon(0_0,100%_0,100%_calc(100%-28px),calc(100%-28px)_100%,0_100%)] ${notes[i].bg} ${notes[i].rotate}`}
             >
               <Paperclip aria-hidden="true" strokeWidth={1.5} className="absolute -top-1 left-6 size-9 -rotate-12" />
-              <span aria-hidden="true" className="block text-[3.5rem] font-extrabold leading-none">
+              <span aria-hidden="true" className="block text-[3.5rem] font-black leading-none">
                 {i + 1}
               </span>
               <h3 className="type-subheading mt-4">{step.title}</h3>

@@ -67,7 +67,10 @@ idiomas preço", a WhatsApp-shared link to `/depoimentos`).
 8. **Differentiators grid** — the six-item list (Contrato Transparente, etc.) as a card grid.
 9. **Testimonials** — curated subset, links to `/depoimentos` for the full list.
 10. **Pricing** — full table (individual/duo × 1-3×/week), current-year figures only on the
-    home page, with a link to `/precos` for year-over-year comparison.
+    home page, with a link to `/precos` for year-over-year comparison. **Built 2026-09-27**
+    (`components/site/home/precos.tsx`) as two side-by-side cards, all six prices visible, no
+    JS; rows come from `lib/pricing.ts` (Payload-shaped) until `pricingPlans` exists. The
+    `/precos` link lands with that page.
 11. **FAQ** — curated subset (accordion), links to `/faq` for the full list.
 12. **Final CTA band** — repeats the hero's headline as a closing hook + WhatsApp CTA.
 13. **Footer** — contact, social, sitemap links, privacy policy link, careers link.
@@ -183,9 +186,12 @@ default and most damaging to this brand specifically):
   testimonials/FAQ/pricing change. Same static-first invariant this workflow applies elsewhere,
   and it directly serves the SEO goal (fast TTFB/LCP correlates with ranking and with mobile
   Core Web Vitals).
-- **Canonical URLs + hreflang**: `[VERIFY: research.md mentions an English mirror site
-  (linktr.ee "WEBSITE IN ENGLISH") already exists externally — decide whether this rebuild
-  absorbs it as a locale or leaves it as a separate site before this is load-bearing]`.
+- **Canonical URLs + hreflang**: **resolved 2026-09-27** (`TASK-brand-alignment.md` §2.7) — the
+  rebuild absorbs the English mirror as a locale and adds Spanish: PT (default) at `/`, EN at
+  `/en`, ES at `/es` (only these three — the user dropped DE/FR). Every page emits its own
+  canonical plus `alternates.languages` for `pt-BR`/`en`/`es`/`x-default` (→ PT); the sitemap
+  lists each locale with its siblings. `/pt/*` 308-redirects to the unprefixed URL. No
+  `Accept-Language` redirect — the header/footer switcher is explicit.
 
 ## 6. Stack
 

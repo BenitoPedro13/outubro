@@ -1,11 +1,16 @@
-import { Manrope } from "next/font/google";
+import { Source_Sans_3 } from "next/font/google";
 
-// Interim loader — docs/visual-identity-spec.md §3 flags the self-hosted variable-font
-// file as still unverified. next/font/google avoids a third-party runtime request either
-// way (fonts are fetched at build time and self-served), so it doesn't block this task.
-export const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-manrope",
+// Brandbook §2.5: Source Sans is the brand's only family ("somente as fontes dessa família
+// devem ser utilizadas"). next/font/google fetches it at build time and self-serves it, so
+// there's no third-party request at runtime. Loaded as the variable font (no `weight`):
+// one file covers every weight the site uses (900 display, 700 subheads/UI, 600 emphasis,
+// 400 body). Listing static weights made Google answer with multi-query `/l/font?kit=…`
+// URLs, which Turbopack's dev font loader rejects ("next/font/google queries have exactly
+// one entry").
+export const sourceSans = Source_Sans_3({
+  // latin-ext carries the IPA in the hero's phonetic note (ĩ ɡ ɐ); unicode-range means
+  // browsers only fetch it for pages that use those glyphs.
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-source-sans",
   display: "swap",
 });

@@ -188,7 +188,9 @@ answer them: Q2, Q3, Q4, Q5 below stay open.
 - **Q3**: Content selection — which testimonials, which FAQ entries, final pricing figures for
   the *current* year — deferred to a follow-up pass once this spec is approved (per the user's
   own framing: "then we can look at the references and select the contents").
-- **Q4**: Exact current-brand typeface, if one was ever licensed, vs. a new pick — `[VERIFY]`,
-  see §3.
+- ~~**Q4**: Exact current-brand typeface, if one was ever licensed, vs. a new pick.~~
+  **Resolved 2026-09-27** — the client delivered its brandbook (`docs/Outubro Idiomas_brandbook.pdf`):
+  **Source Sans** is the brand family (§2.5), palette per §2.6. The user asked to standardise on
+  Source Sans 3 and confirmed the palette. See `visual-identity-spec.md` §3-4.
 - **Q5**: Transactional email provider and analytics tool are not yet chosen — see
   `architecture.md` §6.

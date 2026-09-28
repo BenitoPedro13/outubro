@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { StarBurst } from "@/components/site/doodles";
+import { StarBurst } from "@/components/doc/star-burst";
 
 // The signature interaction, as a labeled specimen — docs/visual-identity-spec.md §2.
 // Plays once when this block enters view (not scroll-scrubbed against the whole page,

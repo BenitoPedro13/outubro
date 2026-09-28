@@ -21,13 +21,19 @@ having the right content, §3 for the visual identity that already exists and mu
 (not replaced), §4 for the reference analysis (Babbly is the primary reference, client's
 favorite; speakPolish secondary), §5 for decisions made 2026-09-09, §6 for open questions.
 
-**Status (2026-09-13): specs approved by the client; Home built (code-owned sections).**
+**Status (2026-09-27): specs approved; Home built and aligned to the client's brandbook, in PT/EN/ES.**
 `docs/architecture.md` (page structure, Payload scope, motion tier decision, SEO plan, stack) and
 `docs/visual-identity-spec.md` (brand metaphors, signature interaction, type/color/doodle-layer
 system — produced via the `awwwards-v8` skill's Invention Gate,
 `.agents/skills/masalale-awwwards-designer/`) were approved as presented in `/apresentacao`
-(`research.md` §5). `/` now ships 10 of the 13 Home sections (`TASK-home-static.md`); testimonials,
-pricing and FAQ wait for Payload (`TASK-scaffold.md` → `TASK-home-cms.md`). **Content selection (final copy, which
+(`research.md` §5). The Home now ships 11 of the 13 sections (`TASK-home-static.md`, `TASK-brand-alignment.md`)
+in three locales — PT at `/`, EN at `/en`, ES at `/es` (only these three; the client dropped DE/FR).
+Testimonials and FAQ wait for Payload (`TASK-scaffold.md` → `TASK-home-cms.md`); pricing is
+rendered from `lib/pricing.ts`, a Payload-shaped stand-in that `TASK-home-cms.md` swaps for a
+query. **The client's brandbook (`docs/Outubro Idiomas_brandbook.pdf`) is the authority on
+palette (§2.6), typeface (§2.5: Source Sans only), logo use (§2.1-2.4: official lockups, never
+re-typeset) and graphic elements (§2.11)** — it overrides the awwwards-v8 taste rules where they
+conflict (pure `#000` is the brand's black). **Content selection (final copy, which
 testimonials, current-year pricing figures) is explicitly deferred** — these specs define
 structure and system, not content; that pass is now open with the client
 (`docs/client-content-request.md`).
@@ -63,6 +69,8 @@ instead).
 | CMS | Payload — **not yet installed** | **scoped narrowly** once it lands: media/blob storage + 4 light collections (pricing, testimonials, FAQ, team) — not a full page-builder CMS. This is "mostly a landing page," the editable surface is genuinely small. |
 | Database | PostgreSQL — **not yet installed** | Payload's Postgres adapter |
 | Media | **Vercel Blob** (`@payloadcms/storage-vercel-blob`) — **not yet installed** | per the client's explicit instruction — this is the concrete reason Payload is in the stack at all right now |
+| Type | **Source Sans 3** (variable, `latin` + `latin-ext`) via `next/font/google` | brandbook §2.5. OG images use the vendored `assets/fonts/SourceSans3-Black.ttf` (OFL) |
+| i18n | Next 16 built-in pattern: `app/[lang]` root layout + `next/root-params`, dictionaries in `content/home/{pt,en,es}.ts` | no library. PT unprefixed via `next.config.ts` rewrite + `/pt` redirects; no `proxy.ts` |
 | Styling | **Tailwind 4.3.3** + **shadcn 4.21.0** (`radix-nova` style, `radix-ui` 1.6.7, `cn` 0.3.0, `tw-animate-css` 1.4.0) · icons **lucide-react 1.45.0** | shadcn chosen because Magic UI's components assume it. Its semantic tokens (`--background`, `--primary`, …) are mapped onto the brand tokens in `app/globals.css` — light only, no `.dark` block. Its generated `button.tsx` was removed (uses `transition-all`, a Tier 1 anti-pattern); CTAs are `components/site/cta-link.tsx`. |
 | Animation | **GSAP 3.15.0** + **Lenis 1.3.26** (**Tier 2**, `awwwards-v8` skill) + selected **React Bits** / **Magic UI** components (Magic UI `Marquee` installed via `shadcn add @magicui/marquee`; React Bits not yet used) | Tier 3 (WebGL) deliberately rejected — see `docs/architecture.md` §4. Use React Bits (reactbits.dev) and Magic UI (magicui.design) *where they fit*, not wholesale — verify exact component names/props against their live docs before use, never invent one (see §5 below). |
 | Forms | Two hand-built typed forms (contact/lead, careers) — not yet built | persisted + emailed, never email-only |
@@ -254,8 +262,9 @@ intentional, not a gap to fix. What *does* carry over regardless of framework:
   — Tier 1 items are non-negotiable (no generic display fonts, no default Tailwind blue, no pure
   `#000`/`#FFF`, no `transition: all`, no mixed icon libraries, no unmodified stock photography,
   no `overflow: hidden` on hero text without descender safety). Tier 2 items need a documented
-  twist if used. This repo's own picks (Manrope, the authored palette in
-  `visual-identity-spec.md` §4, Lucide-only icons) already clear the Tier 1 list.
+  twist if used. This repo's own picks (Source Sans 3 per the brandbook, the
+  brandbook palette in `visual-identity-spec.md` §4, Lucide-only icons) clear the Tier 1 list,
+  with one documented exception: pure `#000` is the brand's own black (brandbook §2.6).
 - **Spacing/timing/type scales** (`aesthetic-foundations.md`) — adopted as-is,
   `visual-identity-spec.md` §7.
 - **Motion tier discipline** — this project is Tier 2, deliberately, and that decision has a
@@ -275,4 +284,5 @@ unique SEO metadata per page (not just the home page), every form submission per
 emailed and never logged, no raw hex outside the token file, Descender Safety on all display
 text, Lucide-only icons, Tier 2 motion (not Tier 3 WebGL) unless the reasoning in
 `architecture.md` §4 is explicitly revisited, editable content (pricing/testimonials/FAQ/team)
-lives in Payload not hardcoded in components.
+lives in Payload not hardcoded in components (pricing's temporary `lib/pricing.ts` stand-in is
+the one documented exception until Payload lands), brandbook palette/type/logo rules win.

@@ -1,9 +1,10 @@
 import { MessageCircle } from "lucide-react";
-import { whatsappHref } from "@/content/home";
+import { getDictionary } from "@/content/dictionaries";
+import { whatsappHref } from "@/content/site";
 
 type CtaLinkProps = {
   children: React.ReactNode;
-  /** Prefilled WhatsApp message; omit for the site-wide default. */
+  /** Prefilled WhatsApp message; omit for the locale's default. */
   message?: string;
   variant?: "lime" | "ink" | "on-dark";
   size?: "md" | "sm";
@@ -15,7 +16,8 @@ type CtaLinkProps = {
 // "opens WhatsApp" hint for screen readers can't drift between sections.
 // Lucide has no WhatsApp glyph (brand icons were removed), so MessageCircle stands in —
 // a single off-system brand SVG would break the Lucide-only rule.
-export function CtaLink({ children, message, variant = "lime", size = "md", className }: CtaLinkProps) {
+export async function CtaLink({ children, message, variant = "lime", size = "md", className }: CtaLinkProps) {
+  const t = await getDictionary();
   const classes = [
     "btn-cta",
     variant === "ink" && "btn-cta--ink",
@@ -27,10 +29,10 @@ export function CtaLink({ children, message, variant = "lime", size = "md", clas
     .join(" ");
 
   return (
-    <a href={whatsappHref(message)} target="_blank" rel="noopener" className={classes}>
+    <a href={whatsappHref(message ?? t.whatsapp.default)} target="_blank" rel="noopener" className={classes}>
       <MessageCircle aria-hidden="true" strokeWidth={2} className={size === "sm" ? "size-4" : "size-5"} />
       <span>{children}</span>
-      <span className="sr-only"> (abre o WhatsApp)</span>
+      <span className="sr-only"> {t.ui.opensWhatsapp}</span>
     </a>
   );
 }
