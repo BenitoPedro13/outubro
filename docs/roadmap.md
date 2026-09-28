@@ -62,7 +62,12 @@ the functions region to `gru1` so functions sit next to the database.
 - **Blocked by:** the user approving the link and provisioning in their Vercel account (both have
   free tiers; account-level actions, so the user confirms before we run them).
 
-### 2. `TASK-home-cms`: Home reads from Payload
+### 2. `TASK-cms` (was `home-cms` + `pages-cms`): every page reads from Payload
+**Order changed 2026-09-28** (user: build all pages first, apply the CMS afterwards). The Home's
+FAQ/Depoimentos sections and `/precos`, `/faq`, `/depoimentos` are now built in step 3 on
+Payload-shaped stand-ins (`TASK-pages-static.md` §2.1). This step installs Payload, creates the
+collections from those types, seeds them once, and swaps the `get*` function bodies. What
+follows is what it still covers:
 - `lib/pricing.ts` body → Payload query. 2026 + 2027 rows seeded once (initial seed only; edits
   happen in the admin panel afterwards).
 - **`Course`/`Service` structured data** for the language offer (open `[VERIFY]` in
@@ -77,7 +82,11 @@ the functions region to `gru1` so functions sit next to the database.
   in `lib/` (no client fetching → no TanStack Query needed yet; it comes in if a client
   component ever needs server data).
 
-### 3. `TASK-pages-static`: pages that need no CMS
+### 3. `TASK-pages-static`: every page, built first
+Scope widened 2026-09-28: all pages, including the CMS-bound ones on stand-ins, plus the
+`/admin`-safe routing (explicit per-page rewrites from a slug map, never a catch-all) and a
+throwaway Payload spike that proves `/admin` and the localized pages coexist. Full plan in
+`docs/tasks/TASK-pages-static.md`.
 - `/metodo`: brand essence, the three pillars in depth, the Communicative Approach, how classes
   run. Built from the brandbook's own words.
 - `/contato`: WhatsApp (primary), Instagram, email if the client has one. **No contact form**
@@ -95,7 +104,7 @@ the functions region to `gru1` so functions sit next to the database.
 - **Icons** (gap): `app/icon.png` is the 1080px, 38 KB symbol PNG. Replace it with an `icon.svg`
   from the traced symbol, plus an `apple-icon.png` and a web manifest.
 
-### 4. `TASK-pages-cms`: pages fed by Payload
+### 4. ~~`TASK-pages-cms`~~: folded into steps 2 and 3 (2026-09-28)
 - `/precos`: the full 2026 table and the 2027 comparison + "entenda o reajuste" copy (drafted).
 - `/faq`: the full list, grouped (Aulas, Pagamento, Reposição, Cancelamento), `FAQPage` JSON-LD.
 - `/depoimentos`: renders the CMS entries (placeholders until the client replaces them).
@@ -161,12 +170,12 @@ Tracked in `client-content-request.md`. None of these block the steps above; the
 ## Order and parallelism
 
 ```
-1 scaffold ──► 2 home-cms ──► 4 pages-cms ──► 5b cms-handoff ──┐
-                                                                   ├─► 6 launch
-3 pages-static + nav + icons (starts now) ──► 5 careers-form ─────┘
+3 pages-static (all pages on stand-ins + routing + Payload spike) ──┐
+                                                                     ├─► 2 cms ──► 5 careers-form ──► 5b cms-handoff ──► 6 launch
+1 scaffold (Payload install, informed by the spike) ─────────────────┘
 ```
 
-Step 3 can run while the user handles the Vercel provisioning for step 1.
+Step 3 goes first; step 1 finishes once the spike has shown the install is safe.
 
 ## Decisions (answered by the user 2026-09-28)
 
@@ -175,3 +184,6 @@ Step 3 can run while the user handles the Vercel provisioning for step 1.
    the admin (no invented quotes; see content policy).
 3. **EN/ES URLs**: localized slugs (`/metodo` · `/en/method` · `/es/metodo`).
 4. **Contact**: WhatsApp-only `/contato`, no contact form.
+5. **Order**: build every page first on Payload-shaped stand-ins, plug the CMS in afterwards,
+   and make sure `/admin` can't break (`TASK-pages-static.md` §2.3). Testimonials therefore
+   render from a stand-in array, still openly placeholders, until `TASK-cms`.

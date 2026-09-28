@@ -285,5 +285,7 @@ unique SEO metadata per page (not just the home page), every form submission per
 emailed and never logged, no raw hex outside the token file, Descender Safety on all display
 text, Lucide-only icons, Tier 2 motion (not Tier 3 WebGL) unless the reasoning in
 `architecture.md` §4 is explicitly revisited, editable content (pricing/testimonials/FAQ/team)
-lives in Payload not hardcoded in components (pricing's temporary `lib/pricing.ts` stand-in is
-the one documented exception until Payload lands), brandbook palette/type/logo rules win.
+lives in Payload not hardcoded in components (until Payload lands, pricing/FAQ/testimonials sit in
+Payload-shaped stand-ins behind one `get*` function each in `lib/`, per `TASK-pages-static.md`
+§2.1; components only ever call the function), `/admin` and `/api` are never rewritten (per-page
+rewrites from the slug map, no catch-all), brandbook palette/type/logo rules win.
