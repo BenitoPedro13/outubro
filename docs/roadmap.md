@@ -37,6 +37,15 @@ Every drafted string gets the existing `[CONTENT]` tag and an entry in
 Each step's blockers are listed; everything else can start right away.
 
 ### 1. `TASK-scaffold` (finish it): Payload, Postgres, Blob
+
+**Provisioning done 2026-09-28** (user-approved): repo linked to Vercel project
+`benitopedro13s-projects/outubroidiomas`; **Neon Postgres** `outubro-db` (free plan, region
+`gru1` São Paulo, Neon auth off since Payload has its own) and **Vercel Blob** store
+`outubro-media` (public, `gru1`), both connected to production/preview/development. Env vars in
+the Vercel project and pulled to the gitignored `.env.local`: `DATABASE_URL` (+ unpooled/`PG*`/
+`POSTGRES_*` variants) and `BLOB_READ_WRITE_TOKEN`. Still to add: `PAYLOAD_SECRET`, and set
+the functions region to `gru1` so functions sit next to the database.
+
 - Link the repo to the Vercel project (`vercel link`), provision **Neon Postgres** via the Vercel
   Marketplace (`vercel integration add neon`) and a **Vercel Blob** store, then `vercel env pull`.
   Env vars arrive automatically (connection string, `BLOB_READ_WRITE_TOKEN`); we add
