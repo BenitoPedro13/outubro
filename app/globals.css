@@ -536,17 +536,29 @@ body {
 
 /* Language cards: the speakPolish "thrown deck" — rotated and overlapping from 1024px,
    straight and stacked below it so nothing is cut off on a phone. */
+/* Asymmetric on purpose: the lift springs (ease-back) but the return settles (ease-out,
+   no overshoot). With ease-back both ways, a card the pointer merely crossed on its way
+   to a neighbour bounced back past its tilt and read as "hovering card 2 moves card 1".
+   z-index drops only after the return finishes, so the card doesn't pop behind its
+   neighbour mid-animation. */
 .deck-card {
-  transition: transform var(--timing-standard) var(--ease-back);
+  transition:
+    transform var(--timing-fast) var(--ease-out),
+    z-index 0s linear var(--timing-fast);
 }
 @media (min-width: 1024px) {
   .deck-card {
+    /* Explicit 0, not auto: 5 → auto can't transition, so the delayed drop is ignored. */
+    z-index: 0;
     transform: rotate(var(--tilt, 0deg));
   }
   .deck-card:hover,
   .deck-card:focus-within {
     z-index: 5;
     transform: rotate(0deg) translateY(-12px);
+    transition:
+      transform var(--timing-standard) var(--ease-back),
+      z-index 0s;
   }
 }
 

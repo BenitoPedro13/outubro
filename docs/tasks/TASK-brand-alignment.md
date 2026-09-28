@@ -181,7 +181,7 @@ Alternatives rejected:
 | `lib/pricing.ts` | new | Payload-shaped pricing rows |
 | `components/site/logo.tsx` | edit | official SVG lockups |
 | `components/site/brand-symbol.tsx` | new | mask-image symbol |
-| `components/site/doodles.tsx` | edit | `StarBurst` removed |
+| `components/site/doodles.tsx` | removal | `StarBurst` moved to `components/doc/`; `StickyNote`/`ChatBubble` were unused |
 | `components/site/language-switcher.tsx` | new | |
 | `components/site/{header,footer,cta-link,mobile-cta-bar,section-heading}.tsx` | edit | dictionary text, footer redesign |
 | `components/site/home/*.tsx` | edit | dictionary text, symbol, hero phonetic |
@@ -238,3 +238,16 @@ Alternatives rejected:
   `components/doc/` for `/apresentacao` rather than being deleted.
 - `public/brand/logo-verde.png` removed (unused). `logo-azul.png` stays for the JSON-LD
   `Organization.logo`, which needs a raster.
+
+### Follow-up from the user's review (2026-09-27)
+
+- **Idiomas cards, "hovering card 2 moves card 1"**: a controlled CDP test showed card 1 does
+  *not* move when the pointer enters card 2 directly, and hover never ping-pongs on the seam. The
+  movement was the card the pointer had just crossed returning with `--ease-back`, which
+  overshoots past its tilt and springs back. The return now uses ease-out (lift stays springy), and
+  the leaving card keeps `z-index: 5` until the return ends (explicit `z-index: 0` at rest, since
+  `5 → auto` can't transition). Measured: card 1 eases monotonically 0° → −4° in ~200ms, no
+  overshoot, z 5 → 0 on landing.
+- **Como funciona cut corner**: a `clip-path` "folded note" corner that sliced the border and
+  shadow with no fold drawn, so it read as a glitch. It isn't in the brandbook either. Removed;
+  the cards now have a full border and shadow.

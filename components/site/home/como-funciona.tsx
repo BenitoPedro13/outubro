@@ -10,7 +10,9 @@ const notes = [
 ];
 
 // Home → Como funciona (architecture.md §1.1.6). Babbly's numbered sticky notes with a
-// paperclip (research.md §4a), on the notebook grid (visual-identity-spec.md §5).
+// paperclip (research.md §4a), on the notebook grid (visual-identity-spec.md §5). No
+// clipped "folded" corner: clip-path sliced the border and shadow with no fold drawn, so
+// it read as a rendering glitch (user review 2026-09-27).
 export async function ComoFunciona() {
   const { comoFunciona } = await getDictionary();
   return (
@@ -22,7 +24,7 @@ export async function ComoFunciona() {
           {comoFunciona.steps.map((step, i) => (
             <li
               key={step.title}
-              className={`sticker relative rounded-md p-7 pt-10 [clip-path:polygon(0_0,100%_0,100%_calc(100%-28px),calc(100%-28px)_100%,0_100%)] ${notes[i].bg} ${notes[i].rotate}`}
+              className={`sticker relative rounded-md p-7 pt-10 ${notes[i].bg} ${notes[i].rotate}`}
             >
               <Paperclip aria-hidden="true" strokeWidth={1.5} className="absolute -top-1 left-6 size-9 -rotate-12" />
               <span aria-hidden="true" className="block text-[3.5rem] font-black leading-none">
